@@ -23,7 +23,7 @@ Map::~Map()
 
 bool Map::Load(void)
 {
-	return /*LoadMap("test.txt") && */ LoadTexture("testtiles.png");
+	return LoadMap("test.txt") &&  LoadTexture("tileset.png");
 }
 
 void Map::Unload(void)
@@ -63,11 +63,11 @@ bool Map::LoadMap(const std::string filename)
 			int index = 0;
 			for (int row = 0; row < height; ++row)
 			{
-				for (int col = 0; col < width; ++col)	
+				for (int col = 0; col < width; ++col)
 				{
 					std::getline(infile, s, ',');
 					std::cout << s << std::endl;
-					tiles[index++] = Tile(row, col, std::atoi(s.c_str()));
+					tiles[index++] = Tile(row, col, std::atoi(s.c_str())-1);
 				}
 			}
 		}
@@ -85,10 +85,10 @@ void Map::Draw( sf::Time delta, sf::RenderWindow *window)
     sf::Sprite spr(spriteSheet);
     for (int i = 0; i < height * width; ++i) // TODO: Erstatt 15 * 18 med riktige verdier
     {
-        val = tiles[i].getValue();
+        val = tiles[i].properties & 63;
         // Regner med at spriteSheet er 10 i bredden => 10 * 32 totalt = 320 px
-        int srcx = (val % 10) * 32;
-        int srcy = (val / 10) * 32;
+        int srcx = (val % 16) * 32;
+        int srcy = (val / 16) * 32;
 
         int targetX = (i % width) * 32 + position.x;
         int targetY = (i / width) * 32 + position.y;

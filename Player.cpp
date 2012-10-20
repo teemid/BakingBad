@@ -18,6 +18,11 @@ void Player::Draw(sf::Time delta, sf::RenderWindow * window)
 {
 }
 
+bool Player::IsExpired()
+{
+	return expired;
+}
+
 sf::Vector2f Player::GetPositon()
 {
 	return position;

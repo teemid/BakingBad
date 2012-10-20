@@ -19,11 +19,10 @@ public:
 	~Game();
 
 	void Initialize(void);
-	void AddEntity(Entity *entity);
-	void RemoveEntity(Entity *entity);
+	void AddEntity(Entity * entity);
 
 	void Start();
-	void DrawSprite(sf::Sprite *sprite);
+	void DrawSprite(sf::Sprite * sprite);
 private:
 	bool Load( void );
 	void Unload( void );
@@ -31,8 +30,10 @@ private:
 	void Draw( sf::Time delta );
 	void Run();
 
+	void RemoveEntities();
+
 	std::string title;
-	std::vector<Entity*> entities;
+	std::vector<Entity *> entities;
 
 	sf::Clock timer;
 	sf::RenderWindow * window;

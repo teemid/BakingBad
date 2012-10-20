@@ -15,6 +15,7 @@ public:
 	bool Load(void);
 	void Update(sf::Time delta);
 	void Draw(sf::Time delta, sf::RenderWindow * window);
+	bool IsExpired();
 
 	sf::Vector2f GetPositon();
 	void SetPosition(sf::Vector2f position);

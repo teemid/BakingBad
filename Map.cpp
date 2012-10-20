@@ -9,11 +9,11 @@
 Map::Map( void )
 {
 	// Standard values for grid height and width
-	this->height = 15;
-	this->width = 18;
-	this->tiles = new Tile[ height * width ];
-	position.x = 0;
-	position.y = 32;
+	height = 15;
+	width = 18;
+	tiles = new Tile[ height * width ];
+	expired = false;
+	position = sf::Vector2f(0.0f, 32.0f);
 }
 
 Map::~Map()
@@ -38,12 +38,22 @@ void Map::Update(sf::Time delta)
 bool Map::LoadTexture(const std::string filename)
 {
 	if (!spriteSheet.loadFromFile(filename.c_str())) return EXIT_FAILURE;
+	return true;
+}
+
+void sToI(std::string s, std::string search, int * value)
+{
+	int pos = s.find(search);
+	int len = s.length() - pos;
+
+	char buf[32];
+	s.copy(buf, len, pos + 1); // starter på char etter søke symbolet/strengen
+	buf[len] = '\0';
+	*value = std::atoi(buf);
 }
 
 bool Map::LoadMap(const std::string filename)
 {
-    std::cout << filename.c_str() << std::endl;
-
 	std::ifstream infile(filename.c_str());
 
 	if (!infile)
@@ -56,10 +66,16 @@ bool Map::LoadMap(const std::string filename)
 	while (infile.good())
 	{
 		std::getline(infile, s);
-		std::getline(infile, s);
 
-		std::istringstream iss(s);
-		if (s == "type=background")
+		if (s == "[header]")
+		{
+			std::getline(infile, s); // width
+			sToI(s, "=", &width);
+
+			std::getline(infile, s); // height
+			sToI(s, "=", &height);
+		}
+		else if (s == "type=background")
 		{
 			// Read the "data=" line
 			std::getline(infile, s);
@@ -89,7 +105,8 @@ bool Map::LoadMap(const std::string filename)
 					// Add the property
 					// TODO: Skal skifte (6 + map verdi) bits mot minst signifikante bit
 					// Antar at verdiene starter på 1 slik at minste verdi blir 7 bits for properties
-					int shift = (6 + std::atoi(s.c_str()));
+					int shift = 6 + std::atoi(s.c_str() - 1);
+					//tiles[index++] = Tile(row, col, std::atoi(s.c_str()) - 1);
 					tiles[index++].properties |= (1 << shift);
 				}
 			}
@@ -112,11 +129,16 @@ void Map::Draw(sf::Time delta, sf::RenderWindow *window)
         int srcx = (val % 16) * 32;
         int srcy = (val / 16) * 32;
 
-        int targetX = (i % width) * 32 + position.x;
-        int targetY = (i / width) * 32 + position.y;
+        int targetX = (i % width) * 32 + (int)position.x;
+        int targetY = (i / width) * 32 + (int)position.y;
         spr.setPosition(sf::Vector2f(targetX, targetY));
 
         spr.setTextureRect(sf::IntRect(srcx, srcy, 32, 32));
         window->draw(spr);
     }
+}
+
+bool Map::IsExpired()
+{
+	return expired;
 }

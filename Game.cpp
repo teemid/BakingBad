@@ -76,6 +76,8 @@ void Game::Update( sf::Time delta )
     // keyboard input
 
     // TODO: Collision testing
+
+	RemoveEntities();
 }
 
 void Game::Draw( sf::Time delta )
@@ -95,12 +97,19 @@ void Game::DrawSprite(sf::Sprite *sprite)
     window->draw(*sprite);
 }
 
-void Game::AddEntity(Entity *entity)
+void Game::AddEntity(Entity * entity)
 {
     entities.push_back(entity);
 }
 
-void RemoveEntity(Entity *entity)
+void Game::RemoveEntities()
 {
     // Må skrives. Delete entity og fjern fra vector (entities)
+	for (std::vector<Entity *>::iterator i = entities.begin(); i != entities.end(); ++i)
+	{
+		if ((*i)->IsExpired())
+		{
+			entities.erase(i--);
+		}
+	}
 }

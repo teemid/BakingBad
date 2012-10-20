@@ -10,3 +10,14 @@
 *.lai
 *.la
 *.a
+
+# VS files and folders
+*.sdf
+*.sln
+*.suo
+*.opensdf
+*.user
+
+ipch
+BakingBad
+Debug

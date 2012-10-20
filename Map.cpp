@@ -18,15 +18,12 @@ Map::~Map()
 
 bool Map::Load( void )
 {
-	return LoadTexture( "map.png") && LoadMap( "test.txt" );
+	return LoadTexture("tiletest.png") && LoadMap( "test.txt" );
 }
 
 bool Map::LoadTexture( const std::string filename )
 {
-	//this->spriteSheet.loadFromFile( filename );
-
-	// TODO: change return value
-	return true;
+    if (!spriteSheet.loadFromFile(filename)) return EXIT_FAILURE;
 }
 
 bool Map::LoadMap(const std::string filename )

@@ -36,6 +36,9 @@ private:
 
 	sf::Clock timer;
 	sf::RenderWindow * window;
+
+	int player1;
+	int player2;
 };
 
 #endif

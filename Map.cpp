@@ -51,14 +51,12 @@ bool Map::LoadMap(const std::string filename)
 	}
 
 	std::string s;
-	std::istringstream iss;
 	while (infile.good())
 	{
 		std::getline(infile, s);
 		std::getline(infile, s);
 
-		iss = std::istringstream(s);
-
+		std::istringstream iss(s);
 		if (s == "type=background")
 		{
 			// Read the "data=" line
@@ -87,13 +85,12 @@ bool Map::LoadMap(const std::string filename)
 				{
 					std::getline(infile, s, ',');
 					// Add the property
-					// TODO: Det er sikkert ikke riktig
-					int shift = (63 + std::atoi(s.c_str()));
+					// TODO: Skal skifte (6 + map verdi) bits mot minst signifikante bit
+					// Antar at verdiene starter på 1 slik at minste verdi blir 7 bits for properties
+					int shift = (6 + std::atoi(s.c_str()));
 					tiles[index++].properties |= (1 << shift);
 				}
 			}
-
-			break;
 		}
 	}
 

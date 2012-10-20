@@ -7,6 +7,4 @@
 int main()
 {
     Game game = Game( "Baking Bad" );
-
-	game.AddEntity( &Map() );
 }

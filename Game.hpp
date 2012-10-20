@@ -26,9 +26,10 @@ private:
 	void Unload( void );
 	void Update( sf::Time delta );
 	void Draw( sf::Time delta );
+	void Run();
 
 	std::string title;
-	std::vector<Entity> entities;
+	std::vector<Entity *> entities;
 
 	sf::Clock timer;
 	sf::RenderWindow * window;

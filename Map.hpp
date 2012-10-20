@@ -8,7 +8,7 @@
 #include "Entity.hpp"
 #include "Tile.hpp"
 
-class Map
+class Map : Entity
 {
 public:
 	Map( void );

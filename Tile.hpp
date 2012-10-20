@@ -18,6 +18,7 @@ public:
 	Tile(int p = 0):properties(p){}
 	bool Collision( );
 	void Draw( sf::Time delta);
+	int getValue(){return properties;}
 private:
 	sf::Vector2i position;
 	int properties;

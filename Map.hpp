@@ -4,11 +4,12 @@
 #include "Entity.hpp"
 #include "Tile.hpp"
 #include <SFML/System/Vector2.hpp>
-#include <SFML/Graphics/Texture.hpp>
+#include <SFML/Graphics.hpp>
 // Doesn't work for some reason
 //#include <SFML/System/String.hpp>
 // Using std::string
 #include <string>
+
 
 class Map : public Entity
 {
@@ -17,6 +18,7 @@ public:
 	~Map();
 
 	bool Load( void );
+    void Draw( sf::Time delta, sf::RenderWindow *window);
 
 	Tile GetCoord( sf::Vector2i position );
 private:

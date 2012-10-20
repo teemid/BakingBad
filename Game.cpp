@@ -1,8 +1,10 @@
 #include "Game.hpp"
 #include "Entity.hpp"
 #include "Map.hpp"
+#include <SFML/Graphics.hpp>
 #include <SFML/Window.hpp>
 #include <vector>
+
 
 // TODO: STATE-MACHINE
 
@@ -68,11 +70,16 @@ void Game::Update( sf::Time delta )
 
 void Game::Draw( sf::Time delta )
 {
+    window->clear();
+
     sf::Time t;
     for (std::vector<Entity*>::iterator it = entites.begin(); it != entites.end(); ++it)
-        (*it)->Draw(t);
+        (*it)->Draw(t, window);
+
+    window->display();
 }
 
+// Slett denne DrawSprite :P
 void Game::DrawSprite(sf::Sprite *sprite)
 {
     window->draw(*sprite);
@@ -85,5 +92,5 @@ bool Game::AddEntity(Entity *entity)
 
 bool RemoveEntity(Entity *entity)
 {
-    // Må skrives. Delete entity
+    // Må skrives. Delete entity og fjern fra vector (entities)
 }

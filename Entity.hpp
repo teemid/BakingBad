@@ -3,6 +3,7 @@
 
 #include <SFML/System/Time.hpp>
 #include <SFML/System/Vector2.hpp>
+#include <SFML/Graphics/Sprite.hpp>
 
 class Entity
 {
@@ -12,6 +13,7 @@ public:
 	virtual void Draw( sf::Time delta );
 private:
 	sf::Vector2f position;
+	sf::Sprite sprite;
 };
 
 #endif

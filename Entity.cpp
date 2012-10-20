@@ -7,8 +7,10 @@ bool Entity::Load( void )
 
 void Entity::Update( sf::Time delta )
 {
+
 }
 
 void Entity::Draw( sf::Time delta )
 {
+
 }

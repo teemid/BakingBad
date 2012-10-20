@@ -29,9 +29,9 @@ bool Map::LoadTexture( const std::string filename )
 	return true;
 }
 
-bool Map::LoadMap( const std::string filename )
+bool Map::LoadMap(const std::string filename )
 {
-	std::ifstream infile( filename );
+	std::ifstream infile(filename.c_str());
 
 	if ( !infile )
 	{
@@ -46,6 +46,6 @@ bool Map::LoadMap( const std::string filename )
 	}
 
 	infile.close();
-	
+
 	return true;
 }

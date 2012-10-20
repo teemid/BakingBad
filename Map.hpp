@@ -2,7 +2,7 @@
 #define MAP_HPP
 
 #include <SFML/System/Vector2.hpp>
-#include <SFML/Graphics/Texture.hpp>
+#include <SFML/Graphics.hpp>
 #include <string>
 
 #include "Entity.hpp"
@@ -17,7 +17,7 @@ public:
 	bool Load( void );
 	void Unload( void );
 	void Update( sf::Time delta );
-	void Draw( sf::Time delta );
+    void Draw( sf::Time delta, sf::RenderWindow *window);
 
 	Tile GetCoord( sf::Vector2i position );
 private:

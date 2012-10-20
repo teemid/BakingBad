@@ -1,24 +1,23 @@
 #include "Game.hpp"
+#include "Entity.hpp"
 #include "Map.hpp"
-
+#include <SFML/Graphics.hpp>
 #include <SFML/Window.hpp>
+#include <vector>
+
 
 // TODO: STATE-MACHINE
 
 Game::Game( std::string title = "Untitled" )
 {
 	this->window = new sf::RenderWindow( sf::VideoMode( SCREEN_WIDTH, SCREEN_HEIGHT ), title );
-	
-	this->AddEntity( &Map() );
-
 	Load();
-	
-	Run(); // skift ut denne med load og kjør run etter load er OK
+	Run();
 }
 
 Game::~Game()
 {
-	delete window;
+    delete window;
 }
 
 void Game::Run()
@@ -51,10 +50,12 @@ void Game::Run()
 
 bool Game::Load( void )
 {
-	for ( std::vector<Entity *>::iterator i = entities.begin(); i != entities.end(); ++i )
-	{
-		if ( !(*i)->Load() ) return false; 
-	}
+    // Lag entity, burde vel egentlig flyttes, men, men :P
+    Map *map = new Map(); // Er entity, så slettingen bør skje i removeEntity()
+    map->Load(); // if-test
+    AddEntity(map);
+
+	return true;
 }
 
 void Unload( void )
@@ -69,10 +70,27 @@ void Game::Update( sf::Time delta )
 
 void Game::Draw( sf::Time delta )
 {
+    window->clear();
 
+    sf::Time t;
+    for (std::vector<Entity*>::iterator it = entites.begin(); it != entites.end(); ++it)
+        (*it)->Draw(t, window);
+
+    window->display();
 }
 
-void Game::AddEntity( Entity * entity )
+// Slett denne DrawSprite :P
+void Game::DrawSprite(sf::Sprite *sprite)
 {
-	entities.push_back( entity );
+    window->draw(*sprite);
+}
+
+void Game::AddEntity(Entity *entity)
+{
+    entites.push_back(entity);
+}
+
+void RemoveEntity(Entity *entity)
+{
+    // Må skrives. Delete entity og fjern fra vector (entities)
 }

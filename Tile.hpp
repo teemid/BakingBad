@@ -4,7 +4,7 @@
 #include <SFML/System/Vector2.hpp>
 #include <SFML/System/Time.hpp>
 
-//enum TileType 
+//enum TileType
 //{
 //	NOTHING = 0,
 //	SOLID = 2,
@@ -16,10 +16,12 @@ class Tile
 {
 public:
 	Tile();
-	Tile( int properties );
-	Tile(int x, int y, int properties );
+	Tile(int properties);
+	Tile(int x, int y, int properties);
+
 	bool Collision( );
-	void Draw( sf::Time delta );
+	void Draw(sf::Time delta);
+	int getValue() { return properties; }
 private:
 	sf::Vector2i position;
 	int properties;

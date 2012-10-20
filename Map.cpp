@@ -23,8 +23,7 @@ Map::~Map()
 
 bool Map::Load(void)
 {
-
-	return LoadMap("test.txt") && LoadTexture("testtiles.png");
+	return LoadMap("test.txt") && LoadTexture("tileset.png");
 }
 
 void Map::Unload(void)
@@ -43,6 +42,8 @@ bool Map::LoadTexture(const std::string filename)
 
 bool Map::LoadMap(const std::string filename)
 {
+    std::cout << filename.c_str() << std::endl;
+
 	std::ifstream infile(filename.c_str());
 
 	if (!infile)
@@ -52,13 +53,12 @@ bool Map::LoadMap(const std::string filename)
 	}
 
 	std::string s;
-	std::istringstream iss;
 	while (infile.good())
 	{
 		std::getline(infile, s);
 		std::getline(infile, s);
 
-		iss = std::istringstream(s);
+		std::istringstream iss(s);
 
 		if (s == "type=background")
 		{
@@ -99,7 +99,6 @@ bool Map::LoadMap(const std::string filename)
 	}
 
 	infile.close();
-
 	return true;
 }
 

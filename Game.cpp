@@ -73,7 +73,9 @@ void Unload( void )
 
 void Game::Update( sf::Time delta )
 {
+    // keyboard input
 
+    // TODO: Collision testing
 }
 
 void Game::Draw( sf::Time delta )

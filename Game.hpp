@@ -18,6 +18,7 @@ public:
 	Game( std::string title );
 	~Game();
 
+	void Initialize(void);
 	void AddEntity(Entity *entity);
 	void RemoveEntity(Entity *entity);
 
@@ -31,7 +32,7 @@ private:
 	void Run();
 
 	std::string title;
-	std::vector<Entity*> entites;
+	std::vector<Entity*> entities;
 
 	sf::Clock timer;
 	sf::RenderWindow * window;

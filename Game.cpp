@@ -11,6 +11,7 @@
 Game::Game( std::string title = "Untitled" )
 {
 	this->window = new sf::RenderWindow( sf::VideoMode( SCREEN_WIDTH, SCREEN_HEIGHT ), title );
+	Initialize();
 	Load();
 	Run();
 }
@@ -37,8 +38,10 @@ void Game::Run()
             switch (event.type)
             {
                 case sf::Event::Closed:
+					{
                     window->close();
-                break;
+					break;
+					}
 
                 default: ; // do nothing
             }
@@ -48,13 +51,18 @@ void Game::Run()
     }
 }
 
+void Game::Initialize( void ) 
+{
+	Map * map = new Map();
+	AddEntity( map );
+}
+
 bool Game::Load( void )
 {
-    // Lag entity, burde vel egentlig flyttes, men, men :P
-    Map *map = new Map(); // Er entity, så slettingen bør skje i removeEntity()
-    map->Load(); // if-test
-    AddEntity(map);
-
+	for (std::vector<Entity*>::iterator i = entities.begin(); i != entities.end(); ++i)
+	{
+		(*i)->Load();
+	}
 	return true;
 }
 
@@ -73,7 +81,7 @@ void Game::Draw( sf::Time delta )
     window->clear();
 
     sf::Time t;
-    for (std::vector<Entity*>::iterator it = entites.begin(); it != entites.end(); ++it)
+    for (std::vector<Entity*>::iterator it = entities.begin(); it != entities.end(); ++it)
         (*it)->Draw(t, window);
 
     window->display();
@@ -87,7 +95,7 @@ void Game::DrawSprite(sf::Sprite *sprite)
 
 void Game::AddEntity(Entity *entity)
 {
-    entites.push_back(entity);
+    entities.push_back(entity);
 }
 
 void RemoveEntity(Entity *entity)

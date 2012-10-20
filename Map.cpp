@@ -9,8 +9,8 @@
 Map::Map( void )
 {
 	// Standard values for grid height and width
-	this->height = 16;
-	this->width = 25;
+	this->height = 15;
+	this->width = 18;
 	this->tiles = new Tile[ height * width ];
 	position.x = 0;
 	position.y = 32;
@@ -23,7 +23,7 @@ Map::~Map()
 
 bool Map::Load(void)
 {
-	return LoadMap("test.txt") && LoadTexture("tiletest.png");
+	return /*LoadMap("test.txt") && */ LoadTexture("testtiles.png");
 }
 
 void Map::Unload(void)
@@ -37,7 +37,7 @@ void Map::Update(sf::Time delta)
 
 bool Map::LoadTexture(const std::string filename)
 {
-    if (!spriteSheet.loadFromFile(filename.c_str())) return EXIT_FAILURE;
+	if ( !spriteSheet.loadFromFile(filename.c_str())) return EXIT_FAILURE;
 }
 
 bool Map::LoadMap(const std::string filename)
@@ -66,6 +66,7 @@ bool Map::LoadMap(const std::string filename)
 				for (int col = 0; col < width; ++col)	
 				{
 					std::getline(infile, s, ',');
+					std::cout << s << std::endl;
 					tiles[index++] = Tile(row, col, std::atoi(s.c_str()));
 				}
 			}

@@ -51,7 +51,7 @@ void Game::Run()
     }
 }
 
-void Game::Initialize( void ) 
+void Game::Initialize( void )
 {
 	Map * map = new Map();
 	AddEntity( map );
@@ -73,7 +73,9 @@ void Unload( void )
 
 void Game::Update( sf::Time delta )
 {
+    // keyboard input
 
+    // TODO: Collision testing
 }
 
 void Game::Draw( sf::Time delta )

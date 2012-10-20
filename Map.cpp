@@ -23,7 +23,7 @@ Map::~Map()
 
 bool Map::Load(void)
 {
-	return LoadMap("test.txt") && LoadTexture("testtiles.png");
+	return LoadMap("test.txt") && LoadTexture("tileset.png");
 }
 
 void Map::Unload(void)
@@ -42,6 +42,8 @@ bool Map::LoadTexture(const std::string filename)
 
 bool Map::LoadMap(const std::string filename)
 {
+    std::cout << filename.c_str() << std::endl;
+
 	std::ifstream infile(filename.c_str());
 
 	if (!infile)
@@ -95,7 +97,6 @@ bool Map::LoadMap(const std::string filename)
 	}
 
 	infile.close();
-
 	return true;
 }
 
@@ -108,8 +109,8 @@ void Map::Draw(sf::Time delta, sf::RenderWindow *window)
     {
         val = tiles[i].properties & 63;
         // Regner med at spriteSheet er 10 i bredden => 10 * 32 totalt = 320 px
-        int srcx = (val % 10) * 32;
-        int srcy = (val / 10) * 32;
+        int srcx = (val % 16) * 32;
+        int srcy = (val / 16) * 32;
 
         int targetX = (i % width) * 32 + position.x;
         int targetY = (i / width) * 32 + position.y;

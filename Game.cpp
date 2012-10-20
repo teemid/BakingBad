@@ -1,4 +1,6 @@
 #include "Game.hpp"
+#include "Map.hpp"
+
 #include <SFML/Window.hpp>
 
 // TODO: STATE-MACHINE
@@ -6,6 +8,11 @@
 Game::Game( std::string title = "Untitled" )
 {
 	this->window = new sf::RenderWindow( sf::VideoMode( SCREEN_WIDTH, SCREEN_HEIGHT ), title );
+	
+	this->AddEntity( &Map() );
+
+	Load();
+	
 	Run(); // skift ut denne med load og kjør run etter load er OK
 }
 
@@ -44,7 +51,10 @@ void Game::Run()
 
 bool Game::Load( void )
 {
-	return false;
+	for ( std::vector<Entity *>::iterator i = entities.begin(); i != entities.end(); ++i )
+	{
+		if ( !(*i)->Load() ) return false; 
+	}
 }
 
 void Unload( void )
@@ -60,4 +70,9 @@ void Game::Update( sf::Time delta )
 void Game::Draw( sf::Time delta )
 {
 
+}
+
+void Game::AddEntity( Entity * entity )
+{
+	entities.push_back( entity );
 }

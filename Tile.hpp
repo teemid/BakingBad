@@ -16,6 +16,8 @@ class Tile
 {
 public:
 	Tile();
+	Tile( int properties );
+	Tile(int x, int y, int properties );
 	bool Collision( );
 	void Draw( sf::Time delta );
 private:

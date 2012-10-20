@@ -2,6 +2,7 @@
 #include <iostream>
 #include <fstream>
 #include <sstream>
+#include <istream>
 
 Map::Map( void )
 {
@@ -18,7 +19,7 @@ Map::~Map()
 
 bool Map::Load( void )
 {
-	return LoadTexture("tiletest.png") && LoadMap( "test.txt" );
+	return LoadMap( "test.txt" ) && LoadTexture("tiletest.png");
 }
 
 void Map::Unload( void )
@@ -37,7 +38,9 @@ void Map::Draw( sf::Time delta )
 
 bool Map::LoadTexture( const std::string filename )
 {
-    if (!spriteSheet.loadFromFile(filename)) return EXIT_FAILURE;
+	// TODO: 
+    //if (!spriteSheet.loadFromFile(filename)) return EXIT_FAILURE;
+	return false;
 }
 
 bool Map::LoadMap(const std::string filename )
@@ -50,13 +53,30 @@ bool Map::LoadMap(const std::string filename )
 	}
 
 	std::string s;
-	std::istringstream ss;
+	std::istringstream iss;
 	while ( infile.good() )
 	{
 		std::getline( infile, s );
+
+		if (s == "type=background")
+		{
+			// Read the "data=" line
+			std::getline(infile, s);
+
+			int index = 0;
+			for (int row = 0; row < height; ++row)
+			{
+				for (int col = 0; col < width; ++col)	
+				{
+					std::getline(infile, s, ',');
+					tiles[index++] = Tile(row, col, std::atoi(s.c_str()));
+				}
+			}
+		}
 	}
 
 	infile.close();
 
 	return true;
 }
+

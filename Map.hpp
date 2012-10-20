@@ -8,7 +8,7 @@
 #include "Entity.hpp"
 #include "Tile.hpp"
 
-class Map : Entity
+class Map : public Entity
 {
 public:
 	Map( void );
@@ -23,6 +23,7 @@ public:
 private:
 	bool LoadTexture( const std::string filename );
 	bool LoadMap( const std::string filename );
+	sf::Texture spriteSheet;
 
 	int width;
 	int height;

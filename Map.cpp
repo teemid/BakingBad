@@ -18,6 +18,9 @@ Map::~Map()
 
 bool Map::Load( void )
 {
+    for (int i = 0; i < width*height; ++i)
+        tiles = new Tile(0);
+
 	return LoadTexture("tiletest.png") && LoadMap( "test.txt" );
 }
 

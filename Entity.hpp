@@ -1,5 +1,5 @@
 #ifndef ENTITY_HPP
-#define ENTTIY_HPP
+#define ENTITY_HPP
 
 #include <SFML/System/Time.hpp>
 #include <SFML/System/Vector2.hpp>
@@ -11,9 +11,12 @@ public:
 	virtual bool Load();
 	virtual void Update( sf::Time delta );
 	virtual void Draw( sf::Time delta );
-private:
+
+protected:
 	sf::Vector2f position;
 	sf::Sprite sprite;
+	int width;
+	int height;
 };
 
 #endif

@@ -10,7 +10,7 @@
 // Using std::string
 #include <string>
 
-class Map : Entity
+class Map : public Entity
 {
 public:
 	Map( void );

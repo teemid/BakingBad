@@ -18,10 +18,11 @@ public:
 	Game( std::string title );
 	~Game();
 
-	bool AddEntity();
-	bool RemoveEntity();
+	bool AddEntity(Entity *entity);
+	bool RemoveEntity(Entity *entity);
 
 	void Start();
+	void DrawSprite(sf::Sprite *sprite);
 private:
 	bool Load( void );
 	void Unload( void );
@@ -30,7 +31,7 @@ private:
 	void Run();
 
 	std::string title;
-	std::vector<Entity> entites;
+	std::vector<Entity*> entites;
 
 	sf::Clock timer;
 	sf::RenderWindow * window;

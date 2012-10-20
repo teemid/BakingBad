@@ -16,6 +16,9 @@ public:
 	void Update(sf::Time delta);
 	void Draw(sf::Time delta, sf::RenderWindow * window);
 
+	sf::Vector2f GetPositon();
+	void SetPosition(sf::Vector2f position);
+
 	void AddItem( int id );
 	void RemoveItem( int id );
 	void RemoveAllItems();

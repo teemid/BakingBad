@@ -1,12 +1,12 @@
 #ifndef GAME_HPP
 #define GAME_HPP
 
-#include "Entity.hpp"
-#include <vector>
-
 #include <SFML/System/Clock.hpp>
 #include <SFML/Graphics.hpp>
 #include <SFML/Window.hpp>
+#include <vector>
+
+#include "Entity.hpp"
 
 class Game
 {
@@ -18,10 +18,9 @@ public:
 	Game( std::string title );
 	~Game();
 
-	bool AddEntity();
+	void AddEntity( Entity * entity );
 	bool RemoveEntity();
 
-	void Start();
 private:
 	bool Load( void );
 	void Unload( void );
@@ -29,9 +28,9 @@ private:
 	void Draw( sf::Time delta );
 
 	std::string title;
-	std::vector<Entity> entites;
+	std::vector<Entity> entities;
 
-	sf::Clock time;
+	sf::Clock timer;
 	sf::RenderWindow * window;
 };
 

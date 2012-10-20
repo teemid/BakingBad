@@ -7,7 +7,8 @@
 class Entity
 {
 public:
-	virtual bool Load();
+	virtual bool Load( void );
+	virtual void Unload( void );
 	virtual void Update( sf::Time delta );
 	virtual void Draw( sf::Time delta );
 private:

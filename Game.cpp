@@ -51,7 +51,7 @@ void Game::Run()
     }
 }
 
-void Game::Initialize( void ) 
+void Game::Initialize( void )
 {
 	Map * map = new Map();
 	AddEntity( map );

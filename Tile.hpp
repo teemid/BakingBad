@@ -21,8 +21,7 @@ public:
 
 	bool Collision( );
 	void Draw(sf::Time delta);
-	int getValue() { return properties; }
-private:
+
 	sf::Vector2i position;
 	int properties;
 };

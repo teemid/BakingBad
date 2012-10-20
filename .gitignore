@@ -5,8 +5,13 @@
 
 # Compiled Dynamic libraries
 *.so
+*.dll
 
 # Compiled Static libraries
 *.lai
 *.la
 *.a
+
+# Other
+*.exe
+*.save

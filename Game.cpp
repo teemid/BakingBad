@@ -1,10 +1,11 @@
 #include "Game.hpp"
 #include "Entity.hpp"
 #include "Map.hpp"
+#include "Player.hpp"
+
 #include <SFML/Graphics.hpp>
 #include <SFML/Window.hpp>
 #include <vector>
-#include "Player.hpp"
 #include <iostream> // debug
 
 
@@ -28,8 +29,7 @@ void Game::Run()
 {
     while(window->isOpen())
     {
-        sf::Time t;
-        timer.restart();
+        sf::Time t = timer.restart();
 
         Update(t);
         Draw(t);
@@ -59,6 +59,8 @@ void Game::Initialize( void )
 	map = new Map();
 	AddEntity( map );
 
+	itemManager = new ItemManager();
+
 	Player* player = new Player(sf::Vector2f(32,128), "player1.png"); // TODO: erstatt position med start position, global
 	sf::Keyboard::Key keys[5] = {sf::Keyboard::Left, sf::Keyboard::Up, sf::Keyboard::Right, sf::Keyboard::Down, sf::Keyboard::RControl};
 	player->setKeys(keys);
@@ -73,6 +75,13 @@ void Game::Initialize( void )
 
 bool Game::Load( void )
 {
+	// TODO: haaaaaaaaaaaaaaaaaaaaaaaaaaard coded
+	itemManager->Load("items.txt");
+	AddEntity(itemManager->SpawnItem("wheat", sf::Vector2f(400.0f, 300.0f), sf::seconds(5.0f)));
+	AddEntity(itemManager->SpawnItem("raisins", sf::Vector2f(64.0f, 64.0f), sf::seconds(10.0f)));
+	AddEntity(itemManager->SpawnItem("bacon", sf::Vector2f(128.0f, 128.0f), sf::seconds(15.0f)));
+	AddEntity(itemManager->SpawnItem("bread", sf::Vector2f(128.0f, 32.0f), sf::seconds(20.0f)));
+
 	for (std::vector<Entity*>::iterator i = entities.begin(); i != entities.end(); ++i)
 	{
 		(*i)->Load();
@@ -82,15 +91,14 @@ bool Game::Load( void )
 
 void Unload( void )
 {
-
+	// TODO: does anything need to be deallocated?
 }
 
 void Game::Update( sf::Time delta )
 {
-    sf::Time t;
     for (std::vector<Entity*>::iterator it = entities.begin(); it != entities.end(); ++it)
     {
-        (*it)->Update(t); // må sende med map for collision testing, UGLY
+        (*it)->Update(delta); // må sende med map for collision testing, UGLY
 
         int x = (*it)->position.x;
         int y = (*it)->position.y;
@@ -170,7 +178,10 @@ void Game::RemoveEntities()
 	{
 		if ((*i)->IsExpired())
 		{
+			Entity * temp = *i;
 			entities.erase(i--);
+
+			delete temp;
 		}
 	}
 }

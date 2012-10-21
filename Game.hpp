@@ -1,6 +1,7 @@
 #ifndef GAME_HPP
 #define GAME_HPP
 
+#include "ItemManager.hpp"
 #include "Entity.hpp"
 #include "Map.hpp"
 #include <vector>
@@ -28,13 +29,13 @@ public:
 	void DrawSprite(sf::Sprite * sprite);
 
 private:
-	bool Load( void );
-	void Unload( void );
-	void Update( sf::Time delta );
-	void Draw( sf::Time delta );
-	void Run();
+	bool Load( void ); // Load resources
+	void Unload( void ); // Unload resources if needed
+	void Update( sf::Time delta ); // update game logic
+	void Draw( sf::Time delta ); // draw all entities 
+	void Run(); // start the game loop
 
-	void RemoveEntities();
+	void RemoveEntities(); // remove entites that have expired
 
 	std::string title;
 	std::vector<Entity *> entities;
@@ -42,7 +43,9 @@ private:
 	sf::Clock timer;
 	sf::RenderWindow * window;
 
+	// references to map and itemmanager needed for gamelogic
 	Map *map;
+	ItemManager * itemManager;
 
 	int player1;
 	int player2;

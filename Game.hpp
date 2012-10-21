@@ -2,6 +2,7 @@
 #define GAME_HPP
 
 #include "Entity.hpp"
+#include "Map.hpp"
 #include <vector>
 
 #include <SFML/System/Clock.hpp>
@@ -11,7 +12,7 @@
 class Game
 {
 public:
-	static const int FPS = 30*4;
+	static const int FPS = 30;
 	static const int SCREEN_WIDTH = 800;
 	static const int SCREEN_HEIGHT = 600;
 	static const int TILE_WIDTH = 32;
@@ -25,6 +26,7 @@ public:
 
 	void Start();
 	void DrawSprite(sf::Sprite * sprite);
+
 private:
 	bool Load( void );
 	void Unload( void );
@@ -39,6 +41,8 @@ private:
 
 	sf::Clock timer;
 	sf::RenderWindow * window;
+
+	Map *map;
 
 	int player1;
 	int player2;

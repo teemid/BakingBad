@@ -6,7 +6,8 @@ Player::Player(sf::Vector2f position, std::string filename)
 	this->position = position;
 	this->texture.loadFromFile(filename.c_str());
 	sprite.setTexture(this->texture, true);
-	speed = 2;
+	speed = 5;
+	type = Entity::TYPE_PLAYER;
 }
 
 bool Player::Load(void)
@@ -25,6 +26,8 @@ void Player::Update(sf::Time delta)
         move(0, -speed);
     else if (sf::Keyboard::isKeyPressed(keyDown))
         move(0, speed);
+    else
+        move(0,0);
 
     sprite.setPosition(position); // Haxx
 
@@ -69,9 +72,9 @@ void Player::setKeys(sf::Keyboard::Key *keys)
     keyAction = keys[4];
 }
 
+// move har ny funksjonalitet og burde vel egentlig skifte navn
 void Player::move(int vx, int vy)
 {
-    // collision testing
-    position.x += vx;
-    position.y += vy;
+    vel.x = vx;
+    vel.y = vy;
 }

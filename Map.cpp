@@ -15,6 +15,7 @@ Map::Map( void )
 	tiles = new Tile[ height * width ];
 	expired = false;
 	position = sf::Vector2f(0.0f, 32.0f);
+	vel = sf::Vector2f(0.0f, 0.0f);
 }
 
 Map::~Map()
@@ -144,10 +145,10 @@ bool Map::IsExpired()
 	return expired;
 }
 
-int Map::GetTileType(sf::Vector2f pos)
+int Map::GetTileType(int x, int y)
 {
-    int cx = pos.x / Game::TILE_WIDTH;
-    int cy = pos.y / Game::TILE_HEIGHT;
+    int cx = x / Game::TILE_WIDTH;
+    int cy = y / Game::TILE_HEIGHT;
     if (cx < 0 || cx > width-1 || cy < 0 || cy > height-1)
         return Tile::NOTHING; // bør skiftes ut med solid, men er nothing for debug
     else

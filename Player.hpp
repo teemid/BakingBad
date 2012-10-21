@@ -32,7 +32,7 @@ private:
 	sf::Keyboard::Key keyUp;
 	sf::Keyboard::Key keyDown;
 	sf::Keyboard::Key keyAction;
-	int speed;
+    int speed;
 	void move(int vx, int vy);
 };
 

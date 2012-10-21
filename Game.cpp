@@ -56,7 +56,7 @@ void Game::Run()
 sf::Texture playerTexture;
 void Game::Initialize( void )
 {
-	Map * map = new Map();
+	map = new Map();
 	AddEntity( map );
 
 	Player* player = new Player(sf::Vector2f(32,128), "player1.png"); // TODO: erstatt position med start position, global
@@ -89,11 +89,54 @@ void Game::Update( sf::Time delta )
 {
     sf::Time t;
     for (std::vector<Entity*>::iterator it = entities.begin(); it != entities.end(); ++it)
-        (*it)->Update(t);
+    {
+        (*it)->Update(t); // må sende med map for collision testing, UGLY
 
-    // keyboard input
+        int x = (*it)->position.x;
+        int y = (*it)->position.y;
 
-    // TODO: Collision testing
+        int vx = (*it)->vel.x;
+        int vy = (*it)->vel.y;
+
+        if ((*it)->type == Entity::TYPE_PLAYER)
+        {
+            // collision testing
+            // RIGHT
+            if (map->GetTileType(x+32+vx, y) == Tile::SOLID)
+            {
+                vx = 0;
+                x = ((x/32)+1) * 32;
+            }
+            else if (map->GetTileType(x+vx, y) == Tile::SOLID)
+            {
+                vx = 0;
+                x = (x/32) * 32;
+            }
+            else
+                x += vx;
+
+            // nede
+            if (map->GetTileType(x, y+32+vy) == Tile::SOLID)
+            {
+                vy = 0;
+                y = (y/32) * 32;
+            }
+            else if (map->GetTileType(x, y+vy) == Tile::SOLID)
+            {
+                vy = 0;
+                y = (y/32) * 32;
+            }
+            else
+                y += vy;
+
+            (*it)->position.x = x;
+            (*it)->position.y = y;
+
+        }
+    }
+
+    // collision testing
+    // move stuff
 
 	RemoveEntities();
 }

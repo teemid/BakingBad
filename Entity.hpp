@@ -15,6 +15,7 @@ public:
 protected:
 	sf::Vector2f position;
 	sf::Sprite sprite;
+	sf::Texture texture;
 	int width;
 	int height;
 };

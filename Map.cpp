@@ -42,8 +42,6 @@ bool Map::LoadTexture(const std::string filename)
 
 bool Map::LoadMap(const std::string filename)
 {
-    std::cout << filename.c_str() << std::endl;
-
 	std::ifstream infile(filename.c_str());
 
 	if (!infile)

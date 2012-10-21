@@ -6,11 +6,12 @@
 #include <map>
 
 #include "Entity.hpp"
+#include <string>
 
 class Player : public Entity
 {
 public:
-	Player( sf::Vector2f position );
+	Player( sf::Vector2f position, std::string filename);
 
 	bool Load(void);
 	void Update(sf::Time delta);
@@ -22,8 +23,15 @@ public:
 	void AddItem( int id );
 	void RemoveItem( int id );
 	void RemoveAllItems();
+	void setKeys(sf::Keyboard::Key *keys);
 private:
 	std::vector<int> items;
+	sf::Keyboard::Key keyLeft;
+	sf::Keyboard::Key keyRight;
+	sf::Keyboard::Key keyUp;
+	sf::Keyboard::Key keyDown;
+	int speed;
+	void move(int vx, int vy);
 };
 
 #endif

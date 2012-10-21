@@ -4,6 +4,9 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/Window.hpp>
 #include <vector>
+#include "Player.hpp"
+#include <iostream> // debug
+
 
 
 // TODO: STATE-MACHINE
@@ -50,11 +53,22 @@ void Game::Run()
         while(timer.getElapsedTime().asMilliseconds() < 1000/FPS);
     }
 }
-
+sf::Texture playerTexture;
 void Game::Initialize( void )
 {
 	Map * map = new Map();
 	AddEntity( map );
+
+	Player* player = new Player(sf::Vector2f(32,128), "player1.png"); // TODO: erstatt position med start position, global
+	sf::Keyboard::Key keys[4] = {sf::Keyboard::Left, sf::Keyboard::Up, sf::Keyboard::Right, sf::Keyboard::Down};
+	player->setKeys(keys);
+	AddEntity(player);
+
+	player = new Player(sf::Vector2f(320, 0), "player2.png");
+    sf::Keyboard::Key keys2[4] = {sf::Keyboard::A, sf::Keyboard::W, sf::Keyboard::D, sf::Keyboard::S};
+    player->setKeys(keys2);
+	AddEntity(player);
+
 }
 
 bool Game::Load( void )
@@ -73,6 +87,10 @@ void Unload( void )
 
 void Game::Update( sf::Time delta )
 {
+    sf::Time t;
+    for (std::vector<Entity*>::iterator it = entities.begin(); it != entities.end(); ++it)
+        (*it)->Update(t);
+
     // keyboard input
 
     // TODO: Collision testing

@@ -11,7 +11,7 @@
 class Game
 {
 public:
-	static const int FPS = 30;
+	static const int FPS = 30*4;
 	static const int SCREEN_WIDTH = 800;
 	static const int SCREEN_HEIGHT = 600;
 

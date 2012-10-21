@@ -60,12 +60,12 @@ void Game::Initialize( void )
 	AddEntity( map );
 
 	Player* player = new Player(sf::Vector2f(32,128), "player1.png"); // TODO: erstatt position med start position, global
-	sf::Keyboard::Key keys[4] = {sf::Keyboard::Left, sf::Keyboard::Up, sf::Keyboard::Right, sf::Keyboard::Down};
+	sf::Keyboard::Key keys[5] = {sf::Keyboard::Left, sf::Keyboard::Up, sf::Keyboard::Right, sf::Keyboard::Down, sf::Keyboard::RControl};
 	player->setKeys(keys);
 	AddEntity(player);
 
 	player = new Player(sf::Vector2f(320, 0), "player2.png");
-    sf::Keyboard::Key keys2[4] = {sf::Keyboard::A, sf::Keyboard::W, sf::Keyboard::D, sf::Keyboard::S};
+    sf::Keyboard::Key keys2[5] = {sf::Keyboard::A, sf::Keyboard::W, sf::Keyboard::D, sf::Keyboard::S, sf::Keyboard::LControl};
     player->setKeys(keys2);
 	AddEntity(player);
 

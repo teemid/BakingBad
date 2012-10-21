@@ -31,6 +31,7 @@ private:
 	sf::Keyboard::Key keyRight;
 	sf::Keyboard::Key keyUp;
 	sf::Keyboard::Key keyDown;
+	sf::Keyboard::Key keyAction;
 	int speed;
 	void move(int vx, int vy);
 };

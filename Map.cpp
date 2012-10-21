@@ -5,6 +5,7 @@
 #include <istream>
 #include <SFML/Graphics.hpp>
 #include <cstdlib>
+#include "Game.hpp"
 
 Map::Map( void )
 {
@@ -126,8 +127,8 @@ void Map::Draw(sf::Time delta, sf::RenderWindow *window)
     {
         val = tiles[i].properties & 63;
         // Regner med at spriteSheet er 10 i bredden => 10 * 32 totalt = 320 px
-        int srcx = (val % 16) * 32;
-        int srcy = (val / 16) * 32;
+        int srcx = (val % 16) * Game::TILE_WIDTH;
+        int srcy = (val / 16) * Game::TILE_HEIGHT;
 
         int targetX = (i % width) * 32 + (int)position.x;
         int targetY = (i / width) * 32 + (int)position.y;
@@ -141,4 +142,14 @@ void Map::Draw(sf::Time delta, sf::RenderWindow *window)
 bool Map::IsExpired()
 {
 	return expired;
+}
+
+int Map::GetTileType(sf::Vector2f pos)
+{
+    int cx = pos.x / Game::TILE_WIDTH;
+    int cy = pos.y / Game::TILE_HEIGHT;
+    if (cx < 0 || cx > width-1 || cy < 0 || cy > height-1)
+        return Tile::NOTHING; // bør skiftes ut med solid, men er nothing for debug
+    else
+        return tiles[cy*width + cx].GetType();
 }

@@ -14,6 +14,8 @@ public:
 	static const int FPS = 30*4;
 	static const int SCREEN_WIDTH = 800;
 	static const int SCREEN_HEIGHT = 600;
+	static const int TILE_WIDTH = 32;
+	static const int TILE_HEIGHT = 32;
 
 	Game( std::string title );
 	~Game();

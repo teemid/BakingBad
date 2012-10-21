@@ -66,6 +66,7 @@ void Player::setKeys(sf::Keyboard::Key *keys)
     keyUp = keys[1];
     keyRight = keys[2];
     keyDown = keys[3];
+    keyAction = keys[4];
 }
 
 void Player::move(int vx, int vy)

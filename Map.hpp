@@ -21,7 +21,7 @@ public:
 
 	bool IsExpired();
 
-	Tile GetTile( sf::Vector2i position );
+	int GetTileType(sf::Vector2f pos); // Get tile type at position (ex: SOLID, NOTHING, see Tile.hpp)
 private:
 	bool LoadTexture(const std::string filename);
 	bool LoadMap(const std::string filename);

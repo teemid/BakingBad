@@ -3,6 +3,8 @@
 
 #include "Game.hpp"
 #include <ctime>
+#include <iostream>
+#include "Tile.hpp"
 
 int main()
 {

@@ -108,12 +108,39 @@ void Game::Update( sf::Time delta )
             x += vx;
             y+=vy;
 
-                if (vx > 0 && (map->GetTileType(x+w, y) == Tile::SOLID ||
-                    map->GetTileType(x+w, y+h) == Tile::SOLID))
+            if (vx > 0)
+            {
+                if (map->GetTileType(x+w, y) == Tile::SOLID &&
+                    map->GetTileType(x+w, y+h) == Tile::SOLID)
                     x = (int)(x/32) * 32 + (32.0f-w)/2;
-                else if (vx < 0 && (map->GetTileType(x, y) == Tile::SOLID ||
-                                    map->GetTileType(x, y+h) == Tile::SOLID))
+                else if (map->GetTileType(x+w, y+h) == Tile::SOLID) // bare nederste
+                {
+                    y -= 5; // her bør man bruke speed fra player eller noe
+                    x -= vx;
+                }
+                else if (map->GetTileType(x+w, y) == Tile::SOLID) // bare øverste
+                {
+                    y += 5;
+                    x -= vx;
+                }
+            }
+            else if (vx < 0)
+            {
+
+                if (map->GetTileType(x, y) == Tile::SOLID &&
+                                    map->GetTileType(x, y+h) == Tile::SOLID)
                     x = ((int)(x/32) + 1) * 32 + (32.0f-w)/2;
+                else if (map->GetTileType(x, y+h) == Tile::SOLID) // bare nederste
+                {
+                    y -= 5;
+                    x -= vx;
+                }
+                else if (map->GetTileType(x, y) == Tile::SOLID) // bare øverste
+                {
+                    y+=5;
+                    x-=vx;
+                }
+            }
 
                 if (vy > 0 && (map->GetTileType(x, y+h) == Tile::SOLID ||
                                map->GetTileType(x+w, y+h) == Tile::SOLID))

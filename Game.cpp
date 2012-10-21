@@ -142,19 +142,38 @@ void Game::Update( sf::Time delta )
                 }
             }
 
-                if (vy > 0 && (map->GetTileType(x, y+h) == Tile::SOLID ||
-                               map->GetTileType(x+w, y+h) == Tile::SOLID))
+            if (vy > 0)
+            {
+                if (map->GetTileType(x, y+h) == Tile::SOLID && map->GetTileType(x+w, y+h) == Tile::SOLID) // begge
                     y = ((int)(y/32) * 32) + (32.0f-h)/2;
-                else if (vy < 0 && (map->GetTileType(x, y) == Tile::SOLID ||
-                                    map->GetTileType(x+w, y) == Tile::SOLID))
+                else if (map->GetTileType(x, y+h) == Tile::SOLID) // bare mot venstre
+                {
+                    x += 5;
+                    y-=vy;
+                }
+                else if (map->GetTileType(x+w, y+h) == Tile::SOLID) // bare mot høyre
+                {
+                    x -= 5;
+                    y-=vy;
+                }
+
+
+            }
+            else if (vy < 0)
+            {
+                if (map->GetTileType(x, y) == Tile::SOLID && map->GetTileType(x+w, y) == Tile::SOLID) // begge
                     y = (((int)(y/32) + 1) * 32) + (32.0f-h)/2;
-
-
-
-
-
-
-
+                else if (map->GetTileType(x, y) == Tile::SOLID) // bare mot venstre
+                {
+                    x += 5;
+                    y -= vy;
+                }
+                else if (map->GetTileType(x+w, y) == Tile::SOLID)
+                {
+                    x -= 5;
+                    y -= vy;
+                }
+            }
 
             (*it)->position.x = x;
             (*it)->position.y = y;

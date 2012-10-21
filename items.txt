@@ -1,0 +1,8 @@
+[image]
+items.png
+
+[items]
+wheat 0
+raisins 5
+bacon 10
+bread 10

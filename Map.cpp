@@ -14,8 +14,9 @@ Map::Map( void )
 	width = 18;
 	tiles = new Tile[ height * width ];
 	expired = false;
-	position = sf::Vector2f(0.0f, 32.0f);
+	position = sf::Vector2f(0.0f, 0.0f); // Dersom du endrer offsettet må du huske å fikse getTileType, ellers blir det bare tull
 	vel = sf::Vector2f(0.0f, 0.0f);
+	type = Entity::TYPE_MAP;
 }
 
 Map::~Map()
@@ -147,10 +148,20 @@ bool Map::IsExpired()
 
 int Map::GetTileType(int x, int y)
 {
+    //int cx = (int)(((float)x - position.x) / (float)Game::TILE_WIDTH);
+    //int cy = (int)(((float)y - position.y) / (float)Game::TILE_HEIGHT);
     int cx = x / Game::TILE_WIDTH;
     int cy = y / Game::TILE_HEIGHT;
+
     if (cx < 0 || cx > width-1 || cy < 0 || cy > height-1)
         return Tile::NOTHING; // bør skiftes ut med solid, men er nothing for debug
     else
+    {
+        /*if (sf::Keyboard::isKeyPressed(sf::Keyboard::H))
+        {
+            std::cout << "pos: " << (x-position.x) << ", " << (y-position.y) << "...\n";
+            std::cout << "(x, y) = (" << cx << ", " << cy << ")\n";
+        }*/
         return tiles[cy*width + cx].GetType();
+    }
 }

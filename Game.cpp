@@ -66,10 +66,11 @@ void Game::Initialize( void )
 	player->setKeys(keys);
 	AddEntity(player);
 
-	player = new Player(sf::Vector2f(300.0f, 0.0f), "player2.png");
-    sf::Keyboard::Key keys2[5] = {sf::Keyboard::A, sf::Keyboard::W, sf::Keyboard::D, sf::Keyboard::S, sf::Keyboard::LControl};
-    player->setKeys(keys2);
+	player = new Player(sf::Vector2f(500.0f,0.0f), "player2.png"); // TODO: erstatt position med start position, global
+	sf::Keyboard::Key keys2[5] = {sf::Keyboard::A, sf::Keyboard::W, sf::Keyboard::D, sf::Keyboard::S, sf::Keyboard::LControl};
+	player->setKeys(keys2);
 	AddEntity(player);
+
 }
 
 bool Game::Load( void )
@@ -102,8 +103,9 @@ void Game::Update( sf::Time delta )
         if ((*it)->type == Entity::TYPE_PLAYER)
         {
             // To the right --> | x+width
-            int w = 24;
+            int w = 24; // skal være player width og height
             int h = 24;
+            int playerSpeed = 8; // skal være speed som ligger i player, men ikke tilgang slik det er nå
 
             x += vx;
             y+=vy;
@@ -115,12 +117,12 @@ void Game::Update( sf::Time delta )
                     x = (int)(x/32) * 32 + (32.0f-w)/2;
                 else if (map->GetTileType(x+w, y+h) == Tile::SOLID) // bare nederste
                 {
-                    y -= 5; // her bør man bruke speed fra player eller noe
+                    y -= playerSpeed; // her bør man bruke speed fra player eller noe
                     x -= vx;
                 }
                 else if (map->GetTileType(x+w, y) == Tile::SOLID) // bare øverste
                 {
-                    y += 5;
+                    y += playerSpeed;
                     x -= vx;
                 }
             }
@@ -132,12 +134,12 @@ void Game::Update( sf::Time delta )
                     x = ((int)(x/32) + 1) * 32 + (32.0f-w)/2;
                 else if (map->GetTileType(x, y+h) == Tile::SOLID) // bare nederste
                 {
-                    y -= 5;
+                    y -= playerSpeed;
                     x -= vx;
                 }
                 else if (map->GetTileType(x, y) == Tile::SOLID) // bare øverste
                 {
-                    y+=5;
+                    y += playerSpeed;
                     x-=vx;
                 }
             }
@@ -148,12 +150,12 @@ void Game::Update( sf::Time delta )
                     y = ((int)(y/32) * 32) + (32.0f-h)/2;
                 else if (map->GetTileType(x, y+h) == Tile::SOLID) // bare mot venstre
                 {
-                    x += 5;
+                    x += playerSpeed;
                     y-=vy;
                 }
                 else if (map->GetTileType(x+w, y+h) == Tile::SOLID) // bare mot høyre
                 {
-                    x -= 5;
+                    x -= playerSpeed;
                     y-=vy;
                 }
 
@@ -165,12 +167,12 @@ void Game::Update( sf::Time delta )
                     y = (((int)(y/32) + 1) * 32) + (32.0f-h)/2;
                 else if (map->GetTileType(x, y) == Tile::SOLID) // bare mot venstre
                 {
-                    x += 5;
+                    x += playerSpeed;
                     y -= vy;
                 }
                 else if (map->GetTileType(x+w, y) == Tile::SOLID)
                 {
-                    x -= 5;
+                    x -= playerSpeed;
                     y -= vy;
                 }
             }

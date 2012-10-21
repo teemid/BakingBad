@@ -6,8 +6,9 @@ Player::Player(sf::Vector2f position, std::string filename)
 	this->position = position;
 	this->texture.loadFromFile(filename.c_str());
 	sprite.setTexture(this->texture, true);
-	speed = 5;
+	speed = 8;
 	type = Entity::TYPE_PLAYER;
+	expired = false;
 }
 
 bool Player::Load(void)

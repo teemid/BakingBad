@@ -22,10 +22,13 @@ public:
 	bool IsExpired();
 
 	int GetTileType(int x, int y); // Get tile type at position (ex: SOLID, NOTHING, see Tile.hpp)
+	sf::Vector2f GetItemSpawnLocation();
 private:
 	bool LoadTexture(const std::string filename);
 	bool LoadMap(const std::string filename);
 	sf::Texture spriteSheet;
+
+	std::vector<sf::Vector2f> locations;
 
 	int width;
 	int height;

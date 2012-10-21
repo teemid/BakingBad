@@ -26,7 +26,23 @@ Map::~Map()
 
 bool Map::Load(void)
 {
-	return LoadMap("test.txt") && LoadTexture("tileset.png");
+	bool loaded = LoadMap("test.txt") && LoadTexture("tileset.png");
+
+	if (loaded)
+	{
+		for (int i = 0; i < width; ++i)
+		{
+			for (int j = 0; j < height; ++j)
+			{
+				if (GetTileType(i * 32, j * 32) != Tile::SOLID)
+				{
+					locations.push_back(sf::Vector2f(i * 32, j * 32));
+				}
+			}
+		}
+	}
+
+	return loaded;
 }
 
 void Map::Unload(void)
@@ -94,33 +110,34 @@ bool Map::LoadMap(const std::string filename)
 				}
 			}
 		}
-		else if (s == "type=collision")
-		{
-			// Read the "data=" line
-			std::getline(infile, s);
+		// No useful values in collision layer with the current setup
+		//else if (s == "type=collision")
+		//{
+		//	// Read the "data=" line
+		//	std::getline(infile, s);
 
-			int index = 0;
-			for (int row = 0; row < height; ++row)
-			{
-				for (int col = 0; col < width; ++col)
-				{
-					std::getline(infile, s, ',');
-					// Add the property
-					// TODO: Skal skifte (6 + map verdi) bits mot minst signifikante bit
-					// Antar at verdiene starter på 1 slik at minste verdi blir 7 bits for properties
-					int shift = 6 + std::atoi(s.c_str() - 1);
-					//tiles[index++] = Tile(row, col, std::atoi(s.c_str()) - 1);
-					tiles[index++].properties |= (1 << shift);
-				}
-			}
-		}
+		//	int index = 0;
+		//	for (int row = 0; row < height; ++row)
+		//	{
+		//		for (int col = 0; col < width; ++col)
+		//		{
+		//			std::getline(infile, s, ',');
+		//			// Add the property
+		//			// TODO: Skal skifte (6 + map verdi) bits mot minst signifikante bit
+		//			// Antar at verdiene starter på 1 slik at minste verdi blir 7 bits for properties
+		//			int shift = 6 + std::atoi(s.c_str() - 1);
+		//			//tiles[index++] = Tile(row, col, std::atoi(s.c_str()) - 1);
+		//			tiles[index++].properties |= (1 << shift);
+		//		}
+		//	}
+		//}
 	}
 
 	infile.close();
 	return true;
 }
 
-void Map::Draw(sf::Time delta, sf::RenderWindow *window)
+void Map::Draw(sf::Time delta, sf::RenderWindow * window)
 {
     // TODO: Gå gjennom tiles og tegn til texture
     int val;
@@ -148,8 +165,6 @@ bool Map::IsExpired()
 
 int Map::GetTileType(int x, int y)
 {
-    //int cx = (int)(((float)x - position.x) / (float)Game::TILE_WIDTH);
-    //int cy = (int)(((float)y - position.y) / (float)Game::TILE_HEIGHT);
     int cx = x / Game::TILE_WIDTH;
     int cy = y / Game::TILE_HEIGHT;
 
@@ -164,4 +179,11 @@ int Map::GetTileType(int x, int y)
         }*/
         return tiles[cy*width + cx].GetType();
     }
+}
+
+sf::Vector2f Map::GetItemSpawnLocation()
+{
+	int i = std::rand() % locations.size();
+
+	return locations[i];
 }

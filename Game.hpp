@@ -35,16 +35,18 @@ private:
 	void Draw( sf::Time delta ); // draw all entities 
 	void Run(); // start the game loop
 
+	void SpawnItems(sf::Time delta);
+
 	void RemoveEntities(); // remove entites that have expired
 
-	std::string title;
-	std::vector<Entity *> entities;
+	std::string title; // window title
+	std::vector<Entity *> entities; // game entities that are updated and drawn
 
 	sf::Clock timer;
 	sf::RenderWindow * window;
 
-	// references to map and itemmanager needed for gamelogic
-	Map *map;
+	// references to map and item manager needed for game logic
+	Map * map;
 	ItemManager * itemManager;
 
 	int player1;

@@ -55,7 +55,7 @@ void Game::Run()
         while(timer.getElapsedTime().asMilliseconds() < 1000/FPS);
     }
 }
-sf::Texture playerTexture;
+
 void Game::Initialize( void )
 {
 	map = new Map();
@@ -77,12 +77,8 @@ void Game::Initialize( void )
 
 bool Game::Load( void )
 {
-	// TODO: haaaaaaaaaaaaaaaaaaaaaaaaaaard coded
+	// TODO: HARD coded
 	itemManager->Load("items.txt");
-	AddEntity(itemManager->SpawnItem("wheat", sf::Vector2f(400.0f, 300.0f), sf::seconds(5.0f)));
-	AddEntity(itemManager->SpawnItem("raisins", sf::Vector2f(64.0f, 64.0f), sf::seconds(10.0f)));
-	AddEntity(itemManager->SpawnItem("bacon", sf::Vector2f(128.0f, 128.0f), sf::seconds(15.0f)));
-	AddEntity(itemManager->SpawnItem("bread", sf::Vector2f(128.0f, 32.0f), sf::seconds(20.0f)));
 
 	for (std::vector<Entity*>::iterator i = entities.begin(); i != entities.end(); ++i)
 	{
@@ -98,6 +94,8 @@ void Unload( void )
 
 void Game::Update( sf::Time delta )
 {
+	SpawnItems(delta);
+
     for (std::vector<Entity*>::iterator it = entities.begin(); it != entities.end(); ++it)
     {
         (*it)->Update(delta); // må sende med map for collision testing, UGLY
@@ -194,6 +192,17 @@ void Game::Update( sf::Time delta )
     // move stuff
 
 	RemoveEntities();
+}
+
+void Game::SpawnItems(sf::Time delta)
+{
+	itemManager->Update(delta);
+	// Select a random id
+	int id = std::rand() % itemManager->GetUpperItemId();
+	// Get a free spawn location from the map
+	sf::Vector2f position = map->GetItemSpawnLocation();
+	// Spawn an item if possible
+	AddEntity(itemManager->SpawnItem(id, position, sf::seconds(20.0f)));
 }
 
 void Game::Draw( sf::Time delta )

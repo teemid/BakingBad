@@ -10,6 +10,7 @@ class Entity
 public:
     static const int TYPE_PLAYER = 0;
     static const int TYPE_ITEM = 1;
+    static const int TYPE_MAP = 2;
 
 	virtual bool Load() = 0;
 	virtual void Update(sf::Time delta) = 0;

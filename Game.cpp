@@ -7,6 +7,8 @@
 #include "Player.hpp"
 #include <iostream> // debug
 
+#include <windows.h>// DEBUG
+
 
 
 // TODO: STATE-MACHINE
@@ -59,16 +61,15 @@ void Game::Initialize( void )
 	map = new Map();
 	AddEntity( map );
 
-	Player* player = new Player(sf::Vector2f(32,128), "player1.png"); // TODO: erstatt position med start position, global
+	Player* player = new Player(sf::Vector2f(500.0f,0.0f), "player1.png"); // TODO: erstatt position med start position, global
 	sf::Keyboard::Key keys[5] = {sf::Keyboard::Left, sf::Keyboard::Up, sf::Keyboard::Right, sf::Keyboard::Down, sf::Keyboard::RControl};
 	player->setKeys(keys);
 	AddEntity(player);
 
-	player = new Player(sf::Vector2f(320, 0), "player2.png");
+	player = new Player(sf::Vector2f(300.0f, 0.0f), "player2.png");
     sf::Keyboard::Key keys2[5] = {sf::Keyboard::A, sf::Keyboard::W, sf::Keyboard::D, sf::Keyboard::S, sf::Keyboard::LControl};
     player->setKeys(keys2);
 	AddEntity(player);
-
 }
 
 bool Game::Load( void )
@@ -92,46 +93,44 @@ void Game::Update( sf::Time delta )
     {
         (*it)->Update(t); // må sende med map for collision testing, UGLY
 
-        int x = (*it)->position.x;
-        int y = (*it)->position.y;
+        float x = (*it)->position.x;
+        float y = (*it)->position.y;
 
         int vx = (*it)->vel.x;
         int vy = (*it)->vel.y;
 
         if ((*it)->type == Entity::TYPE_PLAYER)
         {
-            // collision testing
-            // RIGHT
-            if (map->GetTileType(x+32+vx, y) == Tile::SOLID)
-            {
-                vx = 0;
-                x = ((x/32)+1) * 32;
-            }
-            else if (map->GetTileType(x+vx, y) == Tile::SOLID)
-            {
-                vx = 0;
-                x = (x/32) * 32;
-            }
-            else
-                x += vx;
+            // To the right --> | x+width
+            int w = 24;
+            int h = 24;
 
-            // nede
-            if (map->GetTileType(x, y+32+vy) == Tile::SOLID)
-            {
-                vy = 0;
-                y = (y/32) * 32;
-            }
-            else if (map->GetTileType(x, y+vy) == Tile::SOLID)
-            {
-                vy = 0;
-                y = (y/32) * 32;
-            }
-            else
-                y += vy;
+            x += vx;
+            y+=vy;
+
+                if (vx > 0 && (map->GetTileType(x+w, y) == Tile::SOLID ||
+                    map->GetTileType(x+w, y+h) == Tile::SOLID))
+                    x = (int)(x/32) * 32 + (32.0f-w)/2;
+                else if (vx < 0 && (map->GetTileType(x, y) == Tile::SOLID ||
+                                    map->GetTileType(x, y+h) == Tile::SOLID))
+                    x = ((int)(x/32) + 1) * 32 + (32.0f-w)/2;
+
+                if (vy > 0 && (map->GetTileType(x, y+h) == Tile::SOLID ||
+                               map->GetTileType(x+w, y+h) == Tile::SOLID))
+                    y = ((int)(y/32) * 32) + (32.0f-h)/2;
+                else if (vy < 0 && (map->GetTileType(x, y) == Tile::SOLID ||
+                                    map->GetTileType(x+w, y) == Tile::SOLID))
+                    y = (((int)(y/32) + 1) * 32) + (32.0f-h)/2;
+
+
+
+
+
+
+
 
             (*it)->position.x = x;
             (*it)->position.y = y;
-
         }
     }
 

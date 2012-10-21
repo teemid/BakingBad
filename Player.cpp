@@ -35,6 +35,11 @@ void Player::Draw(sf::Time delta, sf::RenderWindow * window)
     window->draw(sprite);
 }
 
+bool Player::IsExpired()
+{
+	return expired;
+}
+
 sf::Vector2f Player::GetPositon()
 {
 	return position;
@@ -66,8 +71,6 @@ void Player::setKeys(sf::Keyboard::Key *keys)
 void Player::move(int vx, int vy)
 {
     // collision testing
-
-
     position.x += vx;
     position.y += vy;
 }

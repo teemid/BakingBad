@@ -7,7 +7,7 @@ Player::Player(sf::Vector2f position, std::string filename)
 	this->texture.loadFromFile(filename.c_str());
 	sprite.setTexture(this->texture, true);
 	speed = 8;
-	type = Entity::TYPE_PLAYER;
+	type = EntityType::PLAYER;
 	expired = false;
 }
 
@@ -29,19 +29,6 @@ void Player::Update(sf::Time delta)
         move(0, speed);
     else
         move(0,0);
-
-    sprite.setPosition(position); // Haxx
-
-}
-
-void Player::Draw(sf::Time delta, sf::RenderWindow * window)
-{
-    window->draw(sprite);
-}
-
-bool Player::IsExpired()
-{
-	return expired;
 }
 
 sf::Vector2f Player::GetPositon()

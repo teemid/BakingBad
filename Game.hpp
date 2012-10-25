@@ -42,15 +42,15 @@ private:
 	std::string title; // window title
 	std::vector<Entity *> entities; // game entities that are updated and drawn
 
+	// Clock for time
 	sf::Clock timer;
+	// Window reference, handles events
 	sf::RenderWindow * window;
 
-	// references to map and item manager needed for game logic
+	// Map reference needed for doing game logic
 	Map * map;
+	// ItemManager reference needed for doing game logic
 	ItemManager * itemManager;
-
-	int player1;
-	int player2;
 };
 
 #endif

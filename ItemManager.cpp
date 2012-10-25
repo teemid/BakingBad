@@ -1,13 +1,15 @@
 #include "ItemManager.hpp"
 
 #include <SFML/Graphics/Sprite.hpp>
+#include <SFML/Window/Event.hpp>
 
 #include <iostream>
 #include <fstream>
 
 ItemManager::ItemManager()
 {
-	itemLimit = 10;
+	lowerSpawnTimer = 2.0f;
+	upperSpawnTimer = 5.0f;
 	spawnTimer = sf::seconds(0.0f);
 }
 
@@ -72,8 +74,6 @@ Item * ItemManager::SpawnItem(int id, sf::Vector2f position)
 		sf::IntRect rect = sf::IntRect(id * 32, 0, 32, 32);
 		i = new Item(itemNames[id], itemScores[id], &texture, rect);
 		i->position = position;
-		
-		itemPositions.push_back(position);
 		ResetSpawnTimer();
 	}
 	// If the item doesn't exists return an empty item with 0s of timeToLive
@@ -109,14 +109,10 @@ Item * ItemManager::SpawnItem(std::string itemName, sf::Vector2f position)
 		}
 		++id;
 	}
+
 	if (spawnTimer.asSeconds() < 0.0f && found)
 	{
-		sf::IntRect rect = sf::IntRect(32, 0, 32, 32);
-		i = new Item(itemNames[id], itemScores[id], &texture, rect);
-		i->position = position;
-
-		itemPositions.push_back(position);
-		ResetSpawnTimer();
+		i = SpawnItem(id, position);
 	}
 	else
 	{

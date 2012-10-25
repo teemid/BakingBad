@@ -6,19 +6,18 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/Window.hpp>
 #include <vector>
-#include <iostream> // debug
-
-#include <windows.h>// DEBUG
-
-
 
 // TODO: STATE-MACHINE
 
-Game::Game( std::string title = "Untitled" )
+Game::Game(std::string title = "Untitled")
 {
-	this->window = new sf::RenderWindow( sf::VideoMode( SCREEN_WIDTH, SCREEN_HEIGHT ), title );
+	// Create a window and a render context
+	this->window = new sf::RenderWindow(sf::VideoMode(SCREEN_WIDTH, SCREEN_HEIGHT), title);
+	// Initialize resources
 	Initialize();
+	// Load game assets
 	Load();
+	// Enter the game loop
 	Run();
 }
 
@@ -29,6 +28,7 @@ Game::~Game()
 
 void Game::Run()
 {
+	// main game loop
     while(window->isOpen())
     {
         sf::Time t = timer.restart();
@@ -36,7 +36,7 @@ void Game::Run()
         Update(t);
         Draw(t);
 
-        // window close event
+        // Handle events
         sf::Event event;
         while(window->pollEvent(event))
         {
@@ -48,10 +48,11 @@ void Game::Run()
 					break;
 					}
 
-                default: ; // do nothing
+                default: continue; // do nothing
             }
         }
 
+		// Framerate control
         while(timer.getElapsedTime().asMilliseconds() < 1000/FPS);
     }
 }
@@ -59,20 +60,21 @@ void Game::Run()
 void Game::Initialize( void )
 {
 	map = new Map();
-	AddEntity( map );
+	AddEntity(map);
 
 	itemManager = new ItemManager();
 
+	// Player initialization
 	Player* player = new Player(sf::Vector2f(500.0f,0.0f), "player1.png"); // TODO: erstatt position med start position, global
 	sf::Keyboard::Key keys[5] = {sf::Keyboard::Left, sf::Keyboard::Up, sf::Keyboard::Right, sf::Keyboard::Down, sf::Keyboard::RControl};
 	player->setKeys(keys);
 	AddEntity(player);
 
+	// Create and add the second player to entities
 	player = new Player(sf::Vector2f(500.0f,0.0f), "player2.png"); // TODO: erstatt position med start position, global
 	sf::Keyboard::Key keys2[5] = {sf::Keyboard::A, sf::Keyboard::W, sf::Keyboard::D, sf::Keyboard::S, sf::Keyboard::LControl};
 	player->setKeys(keys2);
 	AddEntity(player);
-
 }
 
 bool Game::Load( void )
@@ -80,6 +82,7 @@ bool Game::Load( void )
 	// TODO: HARD coded
 	itemManager->Load("items.txt");
 
+	// loop through 
 	for (std::vector<Entity*>::iterator i = entities.begin(); i != entities.end(); ++i)
 	{
 		(*i)->Load();
@@ -106,7 +109,7 @@ void Game::Update( sf::Time delta )
         int vx = (*it)->vel.x;
         int vy = (*it)->vel.y;
 
-        if ((*it)->type == Entity::TYPE_PLAYER)
+        if ((*it)->GetEntityType() == EntityType::PLAYER)
         {
             // To the right --> | x+width
             int w = 24; // skal være player width og height
@@ -118,15 +121,17 @@ void Game::Update( sf::Time delta )
 
             if (vx > 0)
             {
-                if (map->GetTileType(x+w, y) == Tile::SOLID &&
-                    map->GetTileType(x+w, y+h) == Tile::SOLID)
-                    x = (int)(x/32) * 32 + (32.0f-w)/2;
-                else if (map->GetTileType(x+w, y+h) == Tile::SOLID) // bare nederste
+                if (map->GetTileType(x + w, y    ) == TileType::SOLID &&
+                    map->GetTileType(x + w, y + h) == TileType::SOLID)
+				{
+                    x = (int)(x / 32) * 32 + (32.0f - w) / 2;
+				}
+                else if (map->GetTileType(x + w, y + h) == TileType::SOLID) // bare nederste
                 {
                     y -= playerSpeed; // her bør man bruke speed fra player eller noe
                     x -= vx;
                 }
-                else if (map->GetTileType(x+w, y) == Tile::SOLID) // bare øverste
+                else if (map->GetTileType(x + w, y) == TileType::SOLID) // bare øverste
                 {
                     y += playerSpeed;
                     x -= vx;
@@ -135,48 +140,55 @@ void Game::Update( sf::Time delta )
             else if (vx < 0)
             {
 
-                if (map->GetTileType(x, y) == Tile::SOLID &&
-                                    map->GetTileType(x, y+h) == Tile::SOLID)
-                    x = ((int)(x/32) + 1) * 32 + (32.0f-w)/2;
-                else if (map->GetTileType(x, y+h) == Tile::SOLID) // bare nederste
+                if (map->GetTileType(x, y) == TileType::SOLID &&
+                    map->GetTileType(x, y+h) == TileType::SOLID)
+				{
+                    x = ((int)(x / 32) + 1) * 32 + (32.0f - w) / 2;
+				}
+                else if (map->GetTileType(x, y + h) == TileType::SOLID) // bare nederste
                 {
                     y -= playerSpeed;
                     x -= vx;
                 }
-                else if (map->GetTileType(x, y) == Tile::SOLID) // bare øverste
+                else if (map->GetTileType(x, y) == TileType::SOLID) // bare øverste
                 {
                     y += playerSpeed;
-                    x-=vx;
+                    x -= vx;
                 }
             }
 
             if (vy > 0)
             {
-                if (map->GetTileType(x, y+h) == Tile::SOLID && map->GetTileType(x+w, y+h) == Tile::SOLID) // begge
-                    y = ((int)(y/32) * 32) + (32.0f-h)/2;
-                else if (map->GetTileType(x, y+h) == Tile::SOLID) // bare mot venstre
+                if (map->GetTileType(x    , y + h) == TileType::SOLID && 
+					map->GetTileType(x + w, y + h) == TileType::SOLID) // begge
+				{
+                    y = ((int)(y / 32) * 32) + (32.0f - h) / 2;
+				}
+                else if (map->GetTileType(x, y + h) == TileType::SOLID) // bare mot venstre
                 {
                     x += playerSpeed;
-                    y-=vy;
+                    y -= vy;
                 }
-                else if (map->GetTileType(x+w, y+h) == Tile::SOLID) // bare mot høyre
+                else if (map->GetTileType(x + w, y + h) == TileType::SOLID) // bare mot høyre
                 {
                     x -= playerSpeed;
-                    y-=vy;
+                    y -= vy;
                 }
 
 
             }
             else if (vy < 0)
             {
-                if (map->GetTileType(x, y) == Tile::SOLID && map->GetTileType(x+w, y) == Tile::SOLID) // begge
-                    y = (((int)(y/32) + 1) * 32) + (32.0f-h)/2;
-                else if (map->GetTileType(x, y) == Tile::SOLID) // bare mot venstre
+                if (map->GetTileType(x, y) == TileType::SOLID && map->GetTileType(x+w, y) == TileType::SOLID) // begge
+				{
+                    y = (((int)(y / 32) + 1) * 32) + (32.0f - h) / 2;
+				}
+                else if (map->GetTileType(x, y) == TileType::SOLID) // bare mot venstre
                 {
                     x += playerSpeed;
                     y -= vy;
                 }
-                else if (map->GetTileType(x+w, y) == Tile::SOLID)
+                else if (map->GetTileType(x + w, y) == TileType::SOLID)
                 {
                     x -= playerSpeed;
                     y -= vy;
@@ -211,7 +223,9 @@ void Game::Draw( sf::Time delta )
 
     sf::Time t;
     for (std::vector<Entity*>::iterator it = entities.begin(); it != entities.end(); ++it)
+	{
         (*it)->Draw(t, window);
+	}
 
     window->display();
 }
@@ -229,15 +243,13 @@ void Game::AddEntity(Entity * entity)
 
 void Game::RemoveEntities()
 {
-    // Må skrives. Delete entity og fjern fra vector (entities)
 	for (std::vector<Entity *>::iterator i = entities.begin(); i != entities.end(); ++i)
 	{
 		if ((*i)->IsExpired())
 		{
-			Entity * temp = *i;
-			entities.erase(i--);
-
-			delete temp;
+			Entity * temp = *i;		// Get the entity to be deleted
+			entities.erase(i--);	// Decrement the vector
+			delete temp;			// Clean up the entity refence
 		}
 	}
 }

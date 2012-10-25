@@ -3,9 +3,7 @@
 
 #include <SFML/Graphics/Texture.hpp>
 #include <SFML/System/Time.hpp>
-#include <map>
 
-#include "Entity.hpp"
 #include "Item.hpp"
 
 class ItemManager
@@ -27,19 +25,15 @@ public:
 	Item * SpawnItem(std::string itemName, sf::Vector2f position);
 	Item * SpawnItem(std::string itemName, sf::Vector2f position, sf::Time timeToLive);
 private:
-	// Upper and lower spawn timer in seconds
-	static const int upperSpawnTimer = 5.0f;
-	static const int lowerSpawnTimer = 2.0f;
-
-	int itemLimit;
-
-	sf::Time spawnTimer;
-
+	sf::Texture texture;
+	
 	std::vector<std::string> itemNames;
 	std::vector<int> itemScores;
-	std::vector<sf::Vector2f> itemPositions;
 
-	sf::Texture texture;
+	sf::Time spawnTimer;
+	// Upper and lower spawn timer in seconds
+	int lowerSpawnTimer;
+	int upperSpawnTimer;
 };
 
 #endif

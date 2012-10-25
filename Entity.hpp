@@ -3,27 +3,32 @@
 
 #include <SFML/System/Time.hpp>
 #include <SFML/System/Vector2.hpp>
-#include <SFML/Graphics.hpp>
+#include <SFML/Graphics/Sprite.hpp>
+#include <SFML/Graphics/RenderWindow.hpp>
+
+enum EntityType
+{
+	PLAYER = 0,
+	ITEM = 1,
+	MAP = 2
+};
 
 class Entity
 {
 public:
-    static const int TYPE_PLAYER = 0;
-    static const int TYPE_ITEM = 1;
-    static const int TYPE_MAP = 2;
-
 	virtual bool Load() = 0;
 	virtual void Update(sf::Time delta) = 0;
-	virtual void Draw(sf::Time delta , sf::RenderWindow * window) = 0;
-	virtual bool IsExpired() = 0;
+	virtual void Draw(sf::Time delta , sf::RenderWindow * window);
+
+	virtual EntityType GetEntityType();
+	virtual bool IsExpired();
 
 	sf::Vector2f position;
 	sf::Vector2f vel; // velocity
-	int type; // burde kun være read, men, men, må bli ferdig!
-
 protected:
+	EntityType type;
+
 	sf::Sprite sprite;
-	sf::Texture texture;
 	int width;
 	int height;
 	bool expired;

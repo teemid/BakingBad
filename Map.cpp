@@ -7,7 +7,7 @@
 #include <cstdlib>
 #include "Game.hpp"
 
-Map::Map( void )
+Map::Map( void ) : height(15), width(18)
 {
 	// Standard values for grid height and width
 	height = 15;
@@ -16,7 +16,7 @@ Map::Map( void )
 	expired = false;
 	position = sf::Vector2f(0.0f, 0.0f); // Dersom du endrer offsettet må du huske å fikse getTileType, ellers blir det bare tull
 	vel = sf::Vector2f(0.0f, 0.0f);
-	type = Entity::TYPE_MAP;
+	type = EntityType::MAP;
 }
 
 Map::~Map()
@@ -34,7 +34,7 @@ bool Map::Load(void)
 		{
 			for (int j = 0; j < height; ++j)
 			{
-				if (GetTileType(i * 32, j * 32) != Tile::SOLID)
+				if (GetTileType(i * 32, j * 32) != TileType::NOTHING)
 				{
 					locations.push_back(sf::Vector2f(i * 32, j * 32));
 				}
@@ -169,7 +169,9 @@ int Map::GetTileType(int x, int y)
     int cy = y / Game::TILE_HEIGHT;
 
     if (cx < 0 || cx > width-1 || cy < 0 || cy > height-1)
-        return Tile::NOTHING; // bør skiftes ut med solid, men er nothing for debug
+	{
+        return TileType::NOTHING; // bør skiftes ut med solid, men er nothing for debug
+	}
     else
     {
         /*if (sf::Keyboard::isKeyPressed(sf::Keyboard::H))

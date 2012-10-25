@@ -195,6 +195,9 @@ void Game::Update( sf::Time delta )
 
             (*it)->position.x = x;
             (*it)->position.y = y;
+
+            // TODO: Collision med items
+
         }
     }
 

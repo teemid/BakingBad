@@ -1,12 +1,12 @@
-#ifndef PLAYER_HPP
-#define PLAYER_HPP
-
 #include <SFML/System/Vector2.hpp>
 #include <SFML/Graphics/Texture.hpp>
 #include <SFML/Window/Keyboard.hpp>
 #include <string>
 
 #include "Entity.hpp"
+
+#ifndef PLAYER_HPP
+#define PLAYER_HPP
 
 class Player : public Entity
 {

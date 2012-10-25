@@ -1,11 +1,9 @@
-#include "Game.hpp"
-#include "Entity.hpp"
-#include "Map.hpp"
-#include "Player.hpp"
-
 #include <SFML/Graphics.hpp>
 #include <SFML/Window.hpp>
 #include <vector>
+
+#include "Game.hpp"
+#include "Player.hpp"
 
 // TODO: STATE-MACHINE
 
@@ -228,12 +226,6 @@ void Game::Draw( sf::Time delta )
 	}
 
     window->display();
-}
-
-// Slett denne DrawSprite :P
-void Game::DrawSprite(sf::Sprite *sprite)
-{
-    window->draw(*sprite);
 }
 
 void Game::AddEntity(Entity * entity)

@@ -1,8 +1,8 @@
-#ifndef TILE_HPP
-#define TILE_HPP
-
 #include <SFML/System/Vector2.hpp>
 #include <SFML/System/Time.hpp>
+
+#ifndef TILE_HPP
+#define TILE_HPP
 
 enum TileType
 {
@@ -20,7 +20,7 @@ public:
 	Tile(int x, int y, int properties);
 
 	bool Collision( );
-	int GetType(); // returnerer type (SOLID, NOTHING osv), kanskje skrive om til enum :P
+	TileType GetType(); // returnerer type (SOLID, NOTHING osv), kanskje skrive om til enum :P
 
 	TileType type;
 	sf::Vector2i position;

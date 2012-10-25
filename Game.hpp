@@ -1,14 +1,13 @@
-#ifndef GAME_HPP
-#define GAME_HPP
-
-#include "ItemManager.hpp"
-#include "Entity.hpp"
-#include "Map.hpp"
-#include <vector>
-
 #include <SFML/System/Clock.hpp>
 #include <SFML/Graphics.hpp>
 #include <SFML/Window.hpp>
+#include <vector>
+
+#include "ItemManager.hpp"
+#include "Map.hpp"
+
+#ifndef GAME_HPP
+#define GAME_HPP
 
 class Game
 {
@@ -24,10 +23,6 @@ public:
 
 	void Initialize(void);
 	void AddEntity(Entity * entity);
-
-	void Start();
-	void DrawSprite(sf::Sprite * sprite);
-
 private:
 	bool Load( void ); // Load resources
 	void Unload( void ); // Unload resources if needed

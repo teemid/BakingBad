@@ -1,19 +1,16 @@
-#include "Map.hpp"
 #include <iostream>
 #include <fstream>
 #include <sstream>
 #include <istream>
 #include <SFML/Graphics.hpp>
-#include <cstdlib>
-#include "Game.hpp"
 
-Map::Map( void ) : height(15), width(18)
+#include "Game.hpp"
+#include "Map.hpp"
+
+Map::Map(void) : height(15), width(18)
 {
 	// Standard values for grid height and width
-	height = 15;
-	width = 18;
-	tiles = new Tile[ height * width ];
-	expired = false;
+	tiles = new Tile[height * width];
 	position = sf::Vector2f(0.0f, 0.0f); // Dersom du endrer offsettet må du huske å fikse getTileType, ellers blir det bare tull
 	vel = sf::Vector2f(0.0f, 0.0f);
 	type = EntityType::MAP;
@@ -34,7 +31,7 @@ bool Map::Load(void)
 		{
 			for (int j = 0; j < height; ++j)
 			{
-				if (GetTileType(i * 32, j * 32) != TileType::NOTHING)
+				if (GetTileType(i * 32, j * 32) == TileType::NOTHING)
 				{
 					locations.push_back(sf::Vector2f(i * 32, j * 32));
 				}
@@ -88,11 +85,22 @@ bool Map::LoadMap(const std::string filename)
 
 		if (s == "[header]")
 		{
+			int tempWidth;
+			int tempHeight;
 			std::getline(infile, s); // width
-			sToI(s, "=", &width);
+			sToI(s, "=", &tempWidth);
 
 			std::getline(infile, s); // height
-			sToI(s, "=", &height);
+			sToI(s, "=", &tempHeight);
+
+			// If the map is larger or smaller than the standard map size
+			if (width != tempWidth && height != tempHeight)
+			{
+				// delete the old map
+				delete tiles;
+				// create the new map with the new size
+				tiles = new Tile[ width * height ];
+			}
 		}
 		else if (s == "type=background")
 		{
@@ -110,27 +118,6 @@ bool Map::LoadMap(const std::string filename)
 				}
 			}
 		}
-		// No useful values in collision layer with the current setup
-		//else if (s == "type=collision")
-		//{
-		//	// Read the "data=" line
-		//	std::getline(infile, s);
-
-		//	int index = 0;
-		//	for (int row = 0; row < height; ++row)
-		//	{
-		//		for (int col = 0; col < width; ++col)
-		//		{
-		//			std::getline(infile, s, ',');
-		//			// Add the property
-		//			// TODO: Skal skifte (6 + map verdi) bits mot minst signifikante bit
-		//			// Antar at verdiene starter på 1 slik at minste verdi blir 7 bits for properties
-		//			int shift = 6 + std::atoi(s.c_str() - 1);
-		//			//tiles[index++] = Tile(row, col, std::atoi(s.c_str()) - 1);
-		//			tiles[index++].properties |= (1 << shift);
-		//		}
-		//	}
-		//}
 	}
 
 	infile.close();
@@ -163,23 +150,18 @@ bool Map::IsExpired()
 	return expired;
 }
 
-int Map::GetTileType(int x, int y)
+TileType Map::GetTileType(int x, int y)
 {
     int cx = x / Game::TILE_WIDTH;
     int cy = y / Game::TILE_HEIGHT;
 
-    if (cx < 0 || cx > width-1 || cy < 0 || cy > height-1)
+    if (cx < 0 || cx > width - 1 || cy < 0 || cy > height - 1)
 	{
         return TileType::NOTHING; // bør skiftes ut med solid, men er nothing for debug
 	}
     else
     {
-        /*if (sf::Keyboard::isKeyPressed(sf::Keyboard::H))
-        {
-            std::cout << "pos: " << (x-position.x) << ", " << (y-position.y) << "...\n";
-            std::cout << "(x, y) = (" << cx << ", " << cy << ")\n";
-        }*/
-        return tiles[cy*width + cx].GetType();
+        return tiles[cy * width + cx].GetType();
     }
 }
 

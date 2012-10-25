@@ -16,6 +16,7 @@ enum EntityType
 class Entity
 {
 public:
+	Entity();
 	virtual bool Load() = 0;
 	virtual void Update(sf::Time delta) = 0;
 	virtual void Draw(sf::Time delta , sf::RenderWindow * window);

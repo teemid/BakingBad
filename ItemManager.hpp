@@ -1,10 +1,10 @@
-#ifndef ITEM_MANAGER_HPP
-#define ITEM_MANAGER_HPP
-
 #include <SFML/Graphics/Texture.hpp>
 #include <SFML/System/Time.hpp>
 
 #include "Item.hpp"
+
+#ifndef ITEM_MANAGER_HPP
+#define ITEM_MANAGER_HPP
 
 class ItemManager
 {

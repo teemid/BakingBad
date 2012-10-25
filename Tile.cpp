@@ -16,12 +16,16 @@ Tile::Tile(int x, int y, int properties)
 }
 
 // TODO: Skrive denne riktig med bit shifting, bare temp nå
-int Tile::GetType()
+TileType Tile::GetType()
 {
     // Bare for å teste.
     int id = properties & 63;
     if (id == 17)
+	{
         return SOLID;
+	}
     else
+	{
         return NOTHING;
+	}
 }

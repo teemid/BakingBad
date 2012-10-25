@@ -4,7 +4,6 @@ Item::Item(std::string itemName, int score, sf::Texture * texture, sf::IntRect t
 {
 	this->itemName = itemName;
 	this->score = score;
-	expired = false;
 	this->timeToLive = sf::seconds(10.0f);
 
 	if (texture != NULL)

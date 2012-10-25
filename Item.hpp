@@ -1,7 +1,7 @@
+#include "Entity.hpp"
+
 #ifndef ITEM_HPP
 #define ITEM_HPP
-
-#include "Entity.hpp"
 
 class Item : public Entity
 {

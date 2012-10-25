@@ -1,12 +1,12 @@
-#ifndef MAP_HPP
-#define MAP_HPP
-
 #include <SFML/System/Vector2.hpp>
 #include <SFML/Graphics.hpp>
 #include <string>
 
 #include "Entity.hpp"
 #include "Tile.hpp"
+
+#ifndef MAP_HPP
+#define MAP_HPP
 
 class Map : public Entity
 {
@@ -21,7 +21,7 @@ public:
 
 	bool IsExpired();
 
-	int GetTileType(int x, int y); // Get tile type at position (ex: SOLID, NOTHING, see Tile.hpp)
+	TileType GetTileType(int x, int y); // Get tile type at position (ex: SOLID, NOTHING, see Tile.hpp)
 	sf::Vector2f GetItemSpawnLocation();
 private:
 	bool LoadTexture(const std::string filename);

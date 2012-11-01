@@ -65,13 +65,13 @@ void Game::Initialize( void )
 	// Player initialization
 	Player* player = new Player(sf::Vector2f(500.0f,0.0f), "player1.png"); // TODO: erstatt position med start position, global
 	sf::Keyboard::Key keys[5] = {sf::Keyboard::Left, sf::Keyboard::Up, sf::Keyboard::Right, sf::Keyboard::Down, sf::Keyboard::RControl};
-	player->setKeys(keys);
+	player->SetKeys(keys);
 	AddEntity(player);
 
 	// Create and add the second player to entities
 	player = new Player(sf::Vector2f(500.0f,0.0f), "player2.png"); // TODO: erstatt position med start position, global
 	sf::Keyboard::Key keys2[5] = {sf::Keyboard::A, sf::Keyboard::W, sf::Keyboard::D, sf::Keyboard::S, sf::Keyboard::LControl};
-	player->setKeys(keys2);
+	player->SetKeys(keys2);
 	AddEntity(player);
 }
 
@@ -93,7 +93,7 @@ void Unload( void )
 	// TODO: does anything need to be deallocated?
 }
 
-void Game::Update( sf::Time delta )
+void Game::Update(sf::Time delta)
 {
 	SpawnItems(delta);
 
@@ -101,6 +101,8 @@ void Game::Update( sf::Time delta )
     {
         (*it)->Update(delta); // må sende med map for collision testing, UGLY
 
+		// Why are these values gotten if nothing is to be done with them
+		// Might be to 
         float x = (*it)->position.x;
         float y = (*it)->position.y;
 
@@ -109,13 +111,14 @@ void Game::Update( sf::Time delta )
 
         if ((*it)->GetEntityType() == EntityType::PLAYER)
         {
-            // To the right --> | x+width
-            int w = 24; // skal være player width og height
-            int h = 24;
-            int playerSpeed = 8; // skal være speed som ligger i player, men ikke tilgang slik det er nå
+			Player * player = static_cast<Player *>(*it);
+            // To the right --> | x + width
+            int w = player->GetWidth(); // skal være player width og height
+            int h = player->GetHeight();
+            int playerSpeed = player->GetSpeed(); // skal være speed som ligger i player, men ikke tilgang slik det er nå
 
             x += vx;
-            y+=vy;
+            y += vy;
 
             if (vx > 0)
             {
@@ -177,7 +180,7 @@ void Game::Update( sf::Time delta )
             }
             else if (vy < 0)
             {
-                if (map->GetTileType(x, y) == TileType::SOLID && map->GetTileType(x+w, y) == TileType::SOLID) // begge
+                if (map->GetTileType(x, y) == TileType::SOLID && map->GetTileType(x + w, y) == TileType::SOLID) // begge
 				{
                     y = (((int)(y / 32) + 1) * 32) + (32.0f - h) / 2;
 				}
@@ -193,12 +196,11 @@ void Game::Update( sf::Time delta )
                 }
             }
 
-            (*it)->position.x = x;
-            (*it)->position.y = y;
+            player->position.x = x;
+            player->position.y = y;
+		}
 
-            // TODO: Collision med items
 
-        }
     }
 
     // collision testing
@@ -215,10 +217,10 @@ void Game::SpawnItems(sf::Time delta)
 	// Get a free spawn location from the map
 	sf::Vector2f position = map->GetItemSpawnLocation();
 	// Spawn an item if possible
-	AddEntity(itemManager->SpawnItem(id, position, sf::seconds(20.0f)));
+	AddEntity(itemManager->SpawnItem(id, position, sf::seconds(5.0f)));
 }
 
-void Game::Draw( sf::Time delta )
+void Game::Draw(sf::Time delta)
 {
     window->clear();
 
@@ -243,7 +245,7 @@ void Game::RemoveEntities()
 		if ((*i)->IsExpired())
 		{
 			Entity * temp = *i;		// Get the entity to be deleted
-			entities.erase(i--);	// Decrement the vector
+			entities.erase(i--);	// delete the element from the vector and decrement the iterator
 			delete temp;			// Clean up the entity refence
 		}
 	}

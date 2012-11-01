@@ -22,5 +22,5 @@ bool Item::Load()
 
 void Item::Update(sf::Time delta)
 {
-	timeToLive -= delta;
+	expired = ((timeToLive -= delta) < sf::seconds(0.0f));
 }

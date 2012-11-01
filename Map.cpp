@@ -31,6 +31,8 @@ bool Map::Load(void)
 		{
 			for (int j = 0; j < height; ++j)
 			{
+				// If the tile type is TileType::NOTHING, add it to the 
+				// vector of free spaces on the map
 				if (GetTileType(i * 32, j * 32) == TileType::NOTHING)
 				{
 					locations.push_back(sf::Vector2f(i * 32, j * 32));

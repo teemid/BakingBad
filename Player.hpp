@@ -19,10 +19,14 @@ public:
 	sf::Vector2f GetPositon();
 	void SetPosition(sf::Vector2f position);
 
+	int GetSpeed();
+	int GetWidth();
+	int GetHeight();
+
 	void AddItem(int id);
 	void RemoveItem(int id);
 	void RemoveAllItems();
-	void setKeys(sf::Keyboard::Key * keys);
+	void SetKeys(sf::Keyboard::Key * keys);
 private:
 	sf::Texture texture;
 	std::vector<int> items;

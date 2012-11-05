@@ -19,7 +19,6 @@ public:
 	Tile(int properties);
 	Tile(const int x, const int y, const int properties);
 
-	const bool Collision(void);
 	const TileType GetType(void) const;
 
 	TileType type;

@@ -1,26 +1,26 @@
-#include <SFML/System/Vector2.hpp>
-#include <SFML/System/Time.hpp>
-
 #ifndef TILE_HPP
 #define TILE_HPP
+
+#include <SFML/System/Vector2.hpp>
+#include <SFML/System/Time.hpp>
 
 enum TileType
 {
 	NOTHING = 0,
-	SOLID = 2,
-	SHOP = 4,
-    SHOP2 = 8
+	SOLID	= 2,
+	SHOP	= 4,
+    SHOP2	= 8,
 };
 
 class Tile
 {
 public:
-	Tile();
+	Tile(void);
 	Tile(int properties);
-	Tile(int x, int y, int properties);
+	Tile(const int x, const int y, const int properties);
 
-	bool Collision( );
-	TileType GetType(); // returnerer type (SOLID, NOTHING osv), kanskje skrive om til enum :P
+	const bool Collision(void);
+	const TileType GetType(void) const;
 
 	TileType type;
 	sf::Vector2i position;

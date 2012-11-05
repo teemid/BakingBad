@@ -15,72 +15,62 @@ Player::Player(sf::Vector2f position, std::string filename)
 	type = EntityType::PLAYER;
 }
 
-bool Player::Load(void)
+const bool Player::Load(void)
 {
 	return true;
 }
 
-void Player::Update(sf::Time delta)
+void Player::Update(const sf::Time delta)
 {
     // get keyboard
     if (sf::Keyboard::isKeyPressed(keyLeft))
 	{
-		move(-speed, 0);
+		Move(-speed, 0);
 	}
     else if (sf::Keyboard::isKeyPressed(keyRight))
 	{
-        move(speed, 0);
+        Move(speed, 0);
 	}
     else if (sf::Keyboard::isKeyPressed(keyUp))
 	{
-        move(0, -speed);
+        Move(0, -speed);
 	}
 	else if (sf::Keyboard::isKeyPressed(keyDown))
 	{
-		move(0, speed);
+		Move(0, speed);
 	}
     else
 	{
-        move(0,0);
+        Move(0, 0);
 	}
 }
 
-sf::Vector2f Player::GetPositon()
-{
-	return position;
-}
-
-void Player::SetPosition(sf::Vector2f position)
-{
-	this->position = position;
-}
-
-int Player::GetSpeed()
+int Player::GetSpeed(void) const
 {
 	return speed;
 }
 
-int Player::GetWidth()
+int Player::GetWidth(void) const
 {
 	return width;
 }
 
-int Player::GetHeight()
+int Player::GetHeight(void) const
 {
 	return height;
 }
 
-void Player::AddItem(int id)
+void Player::AddItem(const int id)
 {
 	items[id]++;
 }
 
-void Player::RemoveItem(int id)
+void Player::RemoveItem(const int id)
 {
 	(--items[id]) > -1 ? items[id] : 0;
 }
 
-void Player::SetKeys(sf::Keyboard::Key * keys)
+void Player::SetKeys(sf::Keyboard::Key * const keys)
 {
     keyLeft = keys[0];
     keyUp = keys[1];
@@ -90,8 +80,7 @@ void Player::SetKeys(sf::Keyboard::Key * keys)
 }
 
 // move har ny funksjonalitet og burde vel egentlig skifte navn
-void Player::move(int vx, int vy)
+void Player::Move(const int vx, const int vy)
 {
-    vel.x = vx;
-    vel.y = vy;
+    velocity = sf::Vector2f(vx, vy);
 }

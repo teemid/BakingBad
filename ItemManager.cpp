@@ -2,22 +2,21 @@
 
 #include <SFML/Graphics/Sprite.hpp>
 #include <SFML/Window/Event.hpp>
-
 #include <iostream>
 #include <fstream>
 
-ItemManager::ItemManager()
+ItemManager::ItemManager(void)
 {
 	lowerSpawnTimer = 2.0f;
 	upperSpawnTimer = 5.0f;
 	spawnTimer = sf::seconds(0.0f);
 }
 
-ItemManager::~ItemManager()
+ItemManager::~ItemManager(void)
 {
 }
 
-bool ItemManager::Load(std::string filename)
+const bool ItemManager::Load(const std::string filename)
 {
 	std::ifstream infile(filename.c_str());
 
@@ -46,34 +45,34 @@ bool ItemManager::Load(std::string filename)
 	return true;
 }
 
-void ItemManager::Update(sf::Time delta)
+void ItemManager::Update(const sf::Time delta)
 {
 	spawnTimer -= delta;
 }
 
-sf::Time ItemManager::GetSpawnTimer()
+const sf::Time ItemManager::GetSpawnTimer(void) const
 {
 	return spawnTimer;
 }
 
-void ItemManager::ResetSpawnTimer()
+void ItemManager::ResetSpawnTimer(void)
 {
-	spawnTimer = spawnTimer = sf::seconds(std::rand() % (upperSpawnTimer - lowerSpawnTimer) + lowerSpawnTimer);
+	spawnTimer = sf::seconds(std::rand() % (upperSpawnTimer - lowerSpawnTimer) + lowerSpawnTimer);
 }
 
-int ItemManager::GetUpperItemId()
+const int ItemManager::GetUpperItemId(void) const
 {
 	return itemNames.size();
 }
 
-Item * ItemManager::SpawnItem(int id, sf::Vector2f position)
+Item * ItemManager::SpawnItem(const int id, const sf::Vector2f position)
 {
 	Item * i;
 	if (spawnTimer.asSeconds() <= 0.0f && id <= itemNames.size())
 	{
 		sf::IntRect rect = sf::IntRect(id * 32, 0, 32, 32);
 		i = new Item(itemNames[id], itemScores[id], &texture, rect);
-		i->position = position;
+		i->SetPosition(position);
 		ResetSpawnTimer();
 	}
 	// If the item doesn't exists return an empty item with 0s of timeToLive
@@ -86,7 +85,7 @@ Item * ItemManager::SpawnItem(int id, sf::Vector2f position)
 	return i;
 }
 
-Item * ItemManager::SpawnItem(int id, sf::Vector2f position, sf::Time timeToLive)
+Item * ItemManager::SpawnItem(const int id, const sf::Vector2f position, const sf::Time timeToLive)
 {
 	Item * i = SpawnItem(id, position);
 	i->timeToLive = timeToLive;
@@ -94,7 +93,7 @@ Item * ItemManager::SpawnItem(int id, sf::Vector2f position, sf::Time timeToLive
 	return i;
 }
 
-Item * ItemManager::SpawnItem(std::string itemName, sf::Vector2f position)
+Item * ItemManager::SpawnItem(const std::string itemName, const sf::Vector2f position)
 {
 	Item * i;
 	bool found = false;
@@ -123,7 +122,7 @@ Item * ItemManager::SpawnItem(std::string itemName, sf::Vector2f position)
 	return i;
 }
 
-Item * ItemManager::SpawnItem(std::string itemName, sf::Vector2f position, sf::Time timeToLive)
+Item * ItemManager::SpawnItem(const std::string itemName, const sf::Vector2f position, const sf::Time timeToLive)
 {
 	Item * i = SpawnItem(itemName, position);
 	i->timeToLive = timeToLive;

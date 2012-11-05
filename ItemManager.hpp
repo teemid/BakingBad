@@ -1,29 +1,29 @@
+#ifndef ITEM_MANAGER_HPP
+#define ITEM_MANAGER_HPP
+
 #include <SFML/Graphics/Texture.hpp>
 #include <SFML/System/Time.hpp>
 
 #include "Item.hpp"
 
-#ifndef ITEM_MANAGER_HPP
-#define ITEM_MANAGER_HPP
-
 class ItemManager
 {
 public:
-	ItemManager();
-	~ItemManager();
+	ItemManager(void);
+	~ItemManager(void);
 	
-	bool Load(std::string filename);
-	void Update(sf::Time delta);
+	const bool Load(const std::string filename);
+	void Update(const sf::Time delta);
 
-	sf::Time GetSpawnTimer();
-	void ResetSpawnTimer();
+	const sf::Time GetSpawnTimer(void) const;
+	void ResetSpawnTimer(void);
 
-	int GetUpperItemId();
+	const int GetUpperItemId(void) const;
 
-	Item * SpawnItem(int id, sf::Vector2f position);
-	Item * SpawnItem(int id, sf::Vector2f position, sf::Time timeToLive);
-	Item * SpawnItem(std::string itemName, sf::Vector2f position);
-	Item * SpawnItem(std::string itemName, sf::Vector2f position, sf::Time timeToLive);
+	Item * SpawnItem(const int id, const sf::Vector2f position);
+	Item * SpawnItem(const int id, const sf::Vector2f position, const sf::Time timeToLive);
+	Item * SpawnItem(const std::string itemName, const sf::Vector2f position);
+	Item * SpawnItem(const std::string itemName, const sf::Vector2f position, const sf::Time timeToLive);
 private:
 	sf::Texture texture;
 	

@@ -1,3 +1,6 @@
+#ifndef PLAYER_HPP
+#define PLAYER_HPP
+
 #include <SFML/System/Vector2.hpp>
 #include <SFML/Graphics/Texture.hpp>
 #include <SFML/Window/Keyboard.hpp>
@@ -5,29 +8,25 @@
 
 #include "Entity.hpp"
 
-#ifndef PLAYER_HPP
-#define PLAYER_HPP
-
 class Player : public Entity
 {
 public:
-	Player(sf::Vector2f position, std::string filename);
+	Player(const sf::Vector2f position, const std::string filename);
 
-	bool Load(void);
-	void Update(sf::Time delta);
+	const bool Load(void);
+	void Update(const sf::Time delta);
 
-	sf::Vector2f GetPositon();
-	void SetPosition(sf::Vector2f position);
+	int GetSpeed(void) const;
+	int GetWidth(void) const;
+	int GetHeight(void) const;
 
-	int GetSpeed();
-	int GetWidth();
-	int GetHeight();
-
-	void AddItem(int id);
-	void RemoveItem(int id);
-	void RemoveAllItems();
-	void SetKeys(sf::Keyboard::Key * keys);
+	void AddItem(const int id);
+	void RemoveItem(const int id);
+	void RemoveAllItems(void);
+	void SetKeys(sf::Keyboard::Key * const keys);
 private:
+	void Move(const int vx, const int vy);
+
 	sf::Texture texture;
 	std::vector<int> items;
 	sf::Keyboard::Key keyLeft;
@@ -36,8 +35,6 @@ private:
 	sf::Keyboard::Key keyDown;
 	sf::Keyboard::Key keyAction;
     int speed;
-
-	void move(int vx, int vy);
 };
 
 #endif

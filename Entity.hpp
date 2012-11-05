@@ -8,28 +8,36 @@
 
 enum EntityType
 {
-	PLAYER = 0,
-	ITEM = 1,
-	MAP = 2
+	PLAYER	= 0,
+	ITEM	= 1,
+	MAP		= 2,
 };
 
 class Entity
 {
 public:
-	Entity();
-	virtual bool Load() = 0;
-	virtual void Update(sf::Time delta) = 0;
-	virtual void Draw(sf::Time delta , sf::RenderWindow * window);
+	Entity(void);
+	// Purely virtual functions
+	virtual const bool Load(void) = 0;
+	virtual void Update(const sf::Time delta) = 0;
+	// Virtual functions
+	virtual void Draw(const sf::Time delta , sf::RenderWindow * const window);
+	// Getters and Setters
+	virtual void SetPosition(const sf::Vector2f position);
+	virtual sf::Vector2f GetPosition(void) const;
 
-	virtual EntityType GetEntityType();
-	virtual bool IsExpired();
+	virtual void SetVelocity(const sf::Vector2f velocity);
+	virtual sf::Vector2f GetVelocity(void) const;
 
-	sf::Vector2f position;
-	sf::Vector2f vel; // velocity
+	virtual const EntityType GetEntityType(void) const;
+	virtual const bool IsExpired(void) const;
 protected:
 	EntityType type;
-
+	
 	sf::Sprite sprite;
+	sf::Vector2f position;
+	sf::Vector2f velocity;
+
 	int width;
 	int height;
 	bool expired;

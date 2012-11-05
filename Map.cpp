@@ -1,7 +1,6 @@
 #include <iostream>
 #include <fstream>
 #include <sstream>
-#include <istream>
 #include <SFML/Graphics.hpp>
 
 #include "Game.hpp"
@@ -12,18 +11,18 @@ Map::Map(void) : height(15), width(18)
 	// Standard values for grid height and width
 	tiles = new Tile[height * width];
 	position = sf::Vector2f(0.0f, 0.0f); // Dersom du endrer offsettet må du huske å fikse getTileType, ellers blir det bare tull
-	vel = sf::Vector2f(0.0f, 0.0f);
+	velocity = sf::Vector2f(0.0f, 0.0f);
 	type = EntityType::MAP;
 }
 
-Map::~Map()
+Map::~Map(void)
 {
 	delete tiles;
 }
 
-bool Map::Load(void)
+const bool Map::Load(void)
 {
-	bool loaded = LoadMap("test.txt") && LoadTexture("tileset.png");
+	bool loaded = LoadMap("stormap.txt") && LoadTexture("tileset.png");
 
 	if (loaded)
 	{
@@ -44,21 +43,19 @@ bool Map::Load(void)
 	return loaded;
 }
 
-void Map::Unload(void)
-{
-}
-
-void Map::Update(sf::Time delta)
+void Map::Update(const sf::Time delta)
 {
 
 }
 
-bool Map::LoadTexture(const std::string filename)
+const bool Map::LoadTexture(const std::string filename)
 {
 	if (!spriteSheet.loadFromFile(filename.c_str())) return EXIT_FAILURE;
 	return true;
 }
 
+
+// Helper function used in LoadMap
 void sToI(std::string s, std::string search, int * value)
 {
 	int pos = s.find(search);
@@ -70,7 +67,7 @@ void sToI(std::string s, std::string search, int * value)
 	*value = std::atoi(buf);
 }
 
-bool Map::LoadMap(const std::string filename)
+const bool Map::LoadMap(const std::string filename)
 {
 	std::ifstream infile(filename.c_str());
 
@@ -126,7 +123,7 @@ bool Map::LoadMap(const std::string filename)
 	return true;
 }
 
-void Map::Draw(sf::Time delta, sf::RenderWindow * window)
+void Map::Draw(const sf::Time delta, sf::RenderWindow * const window)
 {
     // TODO: Gå gjennom tiles og tegn til texture
     int val;
@@ -147,19 +144,14 @@ void Map::Draw(sf::Time delta, sf::RenderWindow * window)
     }
 }
 
-bool Map::IsExpired()
-{
-	return expired;
-}
-
-TileType Map::GetTileType(int x, int y)
+const TileType Map::GetTileType(const int x, const int y) const
 {
     int cx = x / Game::TILE_WIDTH;
     int cy = y / Game::TILE_HEIGHT;
 
     if (cx < 0 || cx > width - 1 || cy < 0 || cy > height - 1)
 	{
-        return TileType::NOTHING; // bør skiftes ut med solid, men er nothing for debug
+        return TileType::NOTHING;
 	}
     else
     {
@@ -167,7 +159,7 @@ TileType Map::GetTileType(int x, int y)
     }
 }
 
-sf::Vector2f Map::GetItemSpawnLocation()
+sf::Vector2f Map::GetItemSpawnLocation(void) const
 {
 	int i = std::rand() % locations.size();
 

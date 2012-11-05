@@ -7,7 +7,7 @@
 
 // TODO: STATE-MACHINE
 
-Game::Game(std::string title = "Untitled")
+Game::Game(const std::string title = "Untitled")
 {
 	// Create a window and a render context
 	this->window = new sf::RenderWindow(sf::VideoMode(SCREEN_WIDTH, SCREEN_HEIGHT), title);
@@ -19,12 +19,12 @@ Game::Game(std::string title = "Untitled")
 	Run();
 }
 
-Game::~Game()
+Game::~Game(void)
 {
     delete window;
 }
 
-void Game::Run()
+void Game::Run(void)
 {
 	// main game loop
     while(window->isOpen())
@@ -41,21 +41,21 @@ void Game::Run()
             switch (event.type)
             {
                 case sf::Event::Closed:
-					{
+				{
                     window->close();
 					break;
-					}
+				}
 
-                default: continue; // do nothing
+                default: continue;
             }
         }
 
-		// Framerate control
+		// Stall for framerate control
         while(timer.getElapsedTime().asMilliseconds() < 1000/FPS);
     }
 }
 
-void Game::Initialize( void )
+void Game::Initialize(void)
 {
 	map = new Map();
 	AddEntity(map);
@@ -63,59 +63,65 @@ void Game::Initialize( void )
 	itemManager = new ItemManager();
 
 	// Player initialization
-	Player* player = new Player(sf::Vector2f(500.0f,0.0f), "player1.png"); // TODO: erstatt position med start position, global
+	Player * player;
+		
+	player = new Player(sf::Vector2f(500.0f, 0.0f), "player1.png"); // TODO: erstatt position med start position, global
 	sf::Keyboard::Key keys[5] = {sf::Keyboard::Left, sf::Keyboard::Up, sf::Keyboard::Right, sf::Keyboard::Down, sf::Keyboard::RControl};
 	player->SetKeys(keys);
 	AddEntity(player);
 
 	// Create and add the second player to entities
-	player = new Player(sf::Vector2f(500.0f,0.0f), "player2.png"); // TODO: erstatt position med start position, global
+	player = new Player(sf::Vector2f(500.0f, 0.0f), "player2.png"); // TODO: erstatt position med start position, global
 	sf::Keyboard::Key keys2[5] = {sf::Keyboard::A, sf::Keyboard::W, sf::Keyboard::D, sf::Keyboard::S, sf::Keyboard::LControl};
 	player->SetKeys(keys2);
 	AddEntity(player);
 }
 
-bool Game::Load( void )
+const bool Game::Load(void)
 {
 	// TODO: HARD coded
 	itemManager->Load("items.txt");
 
 	// loop through 
-	for (std::vector<Entity*>::iterator i = entities.begin(); i != entities.end(); ++i)
+	for (std::vector<Entity *>::iterator i = std::begin(entities); i != std::end(entities); ++i)
 	{
 		(*i)->Load();
 	}
+
 	return true;
 }
 
-void Unload( void )
+void Unload(void)
 {
 	// TODO: does anything need to be deallocated?
 }
 
-void Game::Update(sf::Time delta)
+void Game::Update(const sf::Time delta)
 {
 	SpawnItems(delta);
 
-    for (std::vector<Entity*>::iterator it = entities.begin(); it != entities.end(); ++it)
+    for (std::vector<Entity *>::iterator it = std::begin(entities); it != std::end(entities); ++it)
     {
         (*it)->Update(delta); // må sende med map for collision testing, UGLY
 
-		// Why are these values gotten if nothing is to be done with them
-		// Might be to 
-        float x = (*it)->position.x;
-        float y = (*it)->position.y;
+		Player * player;
 
-        int vx = (*it)->vel.x;
-        int vy = (*it)->vel.y;
+		sf::Vector2f p = (*it)->GetPosition();
+		sf::Vector2f v = (*it)->GetVelocity();
+
+        float x = p.x;
+        float y = p.y;
+
+        int vx = v.x;
+        int vy = v.y;
 
         if ((*it)->GetEntityType() == EntityType::PLAYER)
         {
-			Player * player = static_cast<Player *>(*it);
-            // To the right --> | x + width
-            int w = player->GetWidth(); // skal være player width og height
+			player = static_cast<Player *>(*it);
+
+			int w = player->GetWidth();
             int h = player->GetHeight();
-            int playerSpeed = player->GetSpeed(); // skal være speed som ligger i player, men ikke tilgang slik det er nå
+            int playerSpeed = player->GetSpeed();
 
             x += vx;
             y += vy;
@@ -137,12 +143,11 @@ void Game::Update(sf::Time delta)
                     y += playerSpeed;
                     x -= vx;
                 }
-            }
+            } // vx > 0
             else if (vx < 0)
             {
-
-                if (map->GetTileType(x, y) == TileType::SOLID &&
-                    map->GetTileType(x, y+h) == TileType::SOLID)
+                if (map->GetTileType(x, y    ) == TileType::SOLID &&
+                    map->GetTileType(x, y + h) == TileType::SOLID)
 				{
                     x = ((int)(x / 32) + 1) * 32 + (32.0f - w) / 2;
 				}
@@ -156,8 +161,7 @@ void Game::Update(sf::Time delta)
                     y += playerSpeed;
                     x -= vx;
                 }
-            }
-
+            } // vx < 0
             if (vy > 0)
             {
                 if (map->GetTileType(x    , y + h) == TileType::SOLID && 
@@ -175,9 +179,7 @@ void Game::Update(sf::Time delta)
                     x -= playerSpeed;
                     y -= vy;
                 }
-
-
-            }
+            } // vy > 0
             else if (vy < 0)
             {
                 if (map->GetTileType(x, y) == TileType::SOLID && map->GetTileType(x + w, y) == TileType::SOLID) // begge
@@ -194,22 +196,16 @@ void Game::Update(sf::Time delta)
                     x -= playerSpeed;
                     y -= vy;
                 }
-            }
+            } // vy < 0
 
-            player->position.x = x;
-            player->position.y = y;
-		}
-
-
+			player->SetPosition(sf::Vector2f(x, y));
+		} // (*it)->GetEntityType() == EntityType::PLAYER
     }
-
-    // collision testing
-    // move stuff
 
 	RemoveEntities();
 }
 
-void Game::SpawnItems(sf::Time delta)
+void Game::SpawnItems(const sf::Time delta)
 {
 	itemManager->Update(delta);
 	// Select a random id
@@ -220,12 +216,12 @@ void Game::SpawnItems(sf::Time delta)
 	AddEntity(itemManager->SpawnItem(id, position, sf::seconds(5.0f)));
 }
 
-void Game::Draw(sf::Time delta)
+void Game::Draw(const sf::Time delta)
 {
     window->clear();
 
     sf::Time t;
-    for (std::vector<Entity*>::iterator it = entities.begin(); it != entities.end(); ++it)
+    for (std::vector<Entity*>::iterator it = std::begin(entities); it != std::end(entities); ++it)
 	{
         (*it)->Draw(t, window);
 	}
@@ -233,14 +229,14 @@ void Game::Draw(sf::Time delta)
     window->display();
 }
 
-void Game::AddEntity(Entity * entity)
+void Game::AddEntity(Entity * const entity)
 {
     entities.push_back(entity);
 }
 
-void Game::RemoveEntities()
+void Game::RemoveEntities(void)
 {
-	for (std::vector<Entity *>::iterator i = entities.begin(); i != entities.end(); ++i)
+	for (std::vector<Entity *>::iterator i = std::begin(entities); i != std::end(entities); ++i)
 	{
 		if ((*i)->IsExpired())
 		{
